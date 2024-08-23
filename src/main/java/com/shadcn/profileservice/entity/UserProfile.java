@@ -2,11 +2,9 @@ package com.shadcn.profileservice.entity;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.neo4j.core.schema.GeneratedValue;
-import org.springframework.data.neo4j.core.schema.Id;
-import org.springframework.data.neo4j.core.schema.Node;
-import org.springframework.data.neo4j.core.schema.Property;
-import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.MongoId;
+
 
 import java.time.LocalDate;
 
@@ -16,13 +14,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Node("user_profile")
+@Document(collection = "user_profiles")
 public class UserProfile {
-    @Id
-    @GeneratedValue(generatorClass = UUIDStringGenerator.class)
+    @MongoId
     String id;
 
-    @Property("userId")
     String userId;
 
     String firstName;
