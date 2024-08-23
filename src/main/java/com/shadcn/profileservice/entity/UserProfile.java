@@ -1,12 +1,12 @@
 package com.shadcn.profileservice.entity;
 
-import lombok.*;
-import lombok.experimental.FieldDefaults;
+import java.time.LocalDate;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
-
-import java.time.LocalDate;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Getter
 @Setter
@@ -26,9 +26,8 @@ public class UserProfile {
     LocalDate dateOfBirth;
     String phoneNumber;
     //    @Enumerated(EnumType.STRING)
-//    Gender gender;
+    //    Gender gender;
     String address;
     String email;
     String avatar;
-
 }

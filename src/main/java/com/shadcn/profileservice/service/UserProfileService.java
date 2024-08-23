@@ -1,18 +1,19 @@
 package com.shadcn.profileservice.service;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.shadcn.profileservice.dto.request.ProfileCreationRequest;
 import com.shadcn.profileservice.dto.response.UserProfileResponse;
 import com.shadcn.profileservice.entity.UserProfile;
 import com.shadcn.profileservice.mapper.UserProfileMapper;
 import com.shadcn.profileservice.repository.UserProfileRepository;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +37,6 @@ public class UserProfileService {
         return userProfileMapper.toUserProfileReponse(userProfile);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     public List<UserProfileResponse> getAllProfiles() {
         var profiles = userProfileRepository.findAll();
 
