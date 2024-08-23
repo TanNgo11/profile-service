@@ -1,11 +1,12 @@
 package com.shadcn.profileservice.dto.request;
 
+import java.time.LocalDate;
+
 import com.shadcn.profileservice.enums.Status;
 import com.shadcn.profileservice.validator.DobConstraint;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDate;
 
 @Data
 @Builder
@@ -19,8 +20,10 @@ public class ProfileCreationRequest {
     String email;
     String phoneNumber;
     String gender;
+
     @DobConstraint(min = 18, message = "INVALID_DOB")
     LocalDate dateOfBirth;
+
     @Builder.Default
     Status status = Status.ACTIVE;
 }
