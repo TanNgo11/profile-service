@@ -1,9 +1,9 @@
 package com.shadcn.profileservice.entity;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.MongoId;
+import jakarta.persistence.*;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -14,10 +14,12 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Document(collection = "user_profiles")
-public class UserProfile {
-    @MongoId
-    String id;
+@Entity
+@Table(name = "user_profile")
+public class UserProfile implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id; //
 
     String userId;
 
