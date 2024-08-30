@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import com.shadcn.profileservice.enums.Status;
 import com.shadcn.profileservice.validator.DobConstraint;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -20,10 +22,8 @@ public class ProfileCreationRequest {
     String email;
     String phoneNumber;
     String gender;
+    String address;
 
     @DobConstraint(min = 18, message = "INVALID_DOB")
-    LocalDate dateOfBirth;
-
-    @Builder.Default
-    Status status = Status.ACTIVE;
+    LocalDate dob;
 }

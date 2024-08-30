@@ -2,6 +2,7 @@ package com.shadcn.profileservice.controller;
 
 import java.util.List;
 
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 

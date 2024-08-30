@@ -2,6 +2,9 @@ package com.shadcn.profileservice.entity;
 
 import java.time.LocalDate;
 
+import com.shadcn.profileservice.enums.Gender;
+import jakarta.persistence.*;
+import org.glassfish.jaxb.runtime.v2.runtime.property.Property;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
@@ -16,18 +19,19 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Document(collection = "user_profiles")
 public class UserProfile {
-    @MongoId
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     String id;
 
     String userId;
 
     String firstName;
     String lastName;
-    LocalDate dateOfBirth;
+    LocalDate dob;
     String phoneNumber;
-    //    @Enumerated(EnumType.STRING)
-    //    Gender gender;
+    @Enumerated(EnumType.STRING)
+    Gender gender;
     String address;
     String email;
-    String avatar;
+    //String avatar;
 }
