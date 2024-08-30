@@ -2,6 +2,7 @@ package com.shadcn.profileservice.dto.request;
 
 import java.time.LocalDate;
 
+import com.shadcn.profileservice.enums.Gender;
 import com.shadcn.profileservice.enums.Status;
 import com.shadcn.profileservice.validator.DobConstraint;
 
@@ -19,11 +20,11 @@ public class ProfileCreationRequest {
     String lastName;
     String email;
     String phoneNumber;
-    String gender;
+    Gender gender;
+    String address;
 
     @DobConstraint(min = 18, message = "INVALID_DOB")
-    LocalDate dateOfBirth;
+    LocalDate dob;
 
-    @Builder.Default
-    Status status = Status.ACTIVE;
+
 }
