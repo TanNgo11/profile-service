@@ -1,10 +1,13 @@
 package com.shadcn.profileservice.dto.response;
 
-import java.time.LocalDate;
-
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.shadcn.profileservice.enums.Gender;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 @Builder
@@ -16,7 +19,10 @@ public class UserProfileResponse {
     String id;
     String firstName;
     String lastName;
-    LocalDate dob;
+
+    @JsonSerialize(using = LocalDateSerializer.class)
+    LocalDate dateOfBirth;
+
     String city;
     String phoneNumber;
     Gender gender;
