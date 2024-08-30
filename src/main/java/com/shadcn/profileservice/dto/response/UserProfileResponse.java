@@ -2,6 +2,7 @@ package com.shadcn.profileservice.dto.response;
 
 import java.time.LocalDate;
 
+import com.shadcn.profileservice.enums.Gender;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -17,4 +18,7 @@ public class UserProfileResponse {
     String lastName;
     LocalDate dob;
     String city;
+    String phoneNumber;
+    Gender gender;
+    String address;
 }

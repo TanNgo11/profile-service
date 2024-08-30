@@ -3,6 +3,7 @@ package com.shadcn.profileservice.entity;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import com.shadcn.profileservice.enums.Gender;
 import jakarta.persistence.*;
 
 import lombok.*;
@@ -19,16 +20,16 @@ import lombok.experimental.FieldDefaults;
 public class UserProfile implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; //
+    Long id;
 
     String userId;
 
     String firstName;
     String lastName;
-    LocalDate dateOfBirth;
+    LocalDate dob;
     String phoneNumber;
-    //    @Enumerated(EnumType.STRING)
-    //    Gender gender;
+    @Enumerated(EnumType.STRING)
+    Gender gender;
     String address;
     String email;
     String avatar;
