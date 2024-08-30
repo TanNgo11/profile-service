@@ -24,7 +24,7 @@ public class ProfileCreationRequest {
     String address;
 
     @DobConstraint(min = 18, message = "INVALID_DOB")
-    LocalDate dob;
+    LocalDate dateOfBirth;
 
 
 }

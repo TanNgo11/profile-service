@@ -26,7 +26,7 @@ public class UserProfile implements Serializable {
 
     String firstName;
     String lastName;
-    LocalDate dob;
+    LocalDate dateOfBirth;
     String phoneNumber;
     @Enumerated(EnumType.STRING)
     Gender gender;
