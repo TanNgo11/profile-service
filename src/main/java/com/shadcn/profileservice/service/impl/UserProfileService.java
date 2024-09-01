@@ -1,10 +1,19 @@
-package com.shadcn.profileservice.service;
+package com.shadcn.profileservice.service.impl;
 
 import java.util.List;
 
+import com.shadcn.profileservice.dto.response.PageResponse;
+import com.shadcn.profileservice.exception.AppException;
+import com.shadcn.profileservice.exception.ErrorCode;
+import com.shadcn.profileservice.service.IUserProfileService;
+import com.shadcn.profileservice.util.ConverToPaginationResponse;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.shadcn.profileservice.dto.request.ProfileCreationRequest;
@@ -22,7 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
-public class UserProfileService {
+public class UserProfileService implements IUserProfileService {
     UserProfileRepository userProfileRepository;
     UserProfileMapper userProfileMapper;
 
@@ -44,10 +53,12 @@ public class UserProfileService {
     }
 
     @Cacheable("profiles")
-    public List<UserProfileResponse> getAllProfiles() {
+    public PageResponse<UserProfileResponse> getAllProfiles(int current, int pageSize) {
         log.info("Fetching all profiles from database");
-        var profiles = userProfileRepository.findAll();
 
-        return profiles.stream().map(userProfileMapper::toUserProfileReponse).toList();
+        Pageable pageable = PageRequest.of(current-1, pageSize);
+        Page<UserProfile> profiles = userProfileRepository.findAll(pageable);
+
+        return ConverToPaginationResponse.toPageResponse(profiles, userProfileMapper::toUserProfileReponse, current);
     }
 }

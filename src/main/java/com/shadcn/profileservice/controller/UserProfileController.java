@@ -1,18 +1,15 @@
 package com.shadcn.profileservice.controller;
 
-import java.util.List;
-
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
 import com.shadcn.profileservice.dto.request.ProfileCreationRequest;
 import com.shadcn.profileservice.dto.response.ApiResponse;
+import com.shadcn.profileservice.dto.response.PageResponse;
 import com.shadcn.profileservice.dto.response.UserProfileResponse;
-import com.shadcn.profileservice.service.UserProfileService;
-
+import com.shadcn.profileservice.service.impl.UserProfileService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,9 +29,9 @@ public class UserProfileController {
 
     @GetMapping("/users")
     @PreAuthorize("hasRole('ADMIN')")
-    ApiResponse<List<UserProfileResponse>> getAllProfiles() {
-        return ApiResponse.<List<UserProfileResponse>>builder()
-                .result(userProfileService.getAllProfiles())
-                .build();
+    ApiResponse<PageResponse<UserProfileResponse>> getAllProfiles(
+         @RequestParam(defaultValue = "1", required = false)   Integer current,
+         @RequestParam(defaultValue = "10", required = false)   Integer pageSize) {
+        return ApiResponse.success(userProfileService.getAllProfiles(current, pageSize));
     }
 }
