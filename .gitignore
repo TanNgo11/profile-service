@@ -22,7 +22,7 @@ target/
 .env.local
 .env
 
-/src/main/resources/application.yaml
+
 
 ### NetBeans ###
 /nbproject/private/
