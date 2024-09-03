@@ -4,7 +4,7 @@ import com.shadcn.profileservice.dto.request.ProfileCreationRequest;
 import com.shadcn.profileservice.dto.response.ApiResponse;
 import com.shadcn.profileservice.dto.response.PageResponse;
 import com.shadcn.profileservice.dto.response.UserProfileResponse;
-import com.shadcn.profileservice.service.impl.UserProfileService;
+import com.shadcn.profileservice.service.IUserProfileService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserProfileController {
-    UserProfileService userProfileService;
-
+    IUserProfileService userProfileService;
+//cc
     @PostMapping("/users")
     UserProfileResponse createProfile(@RequestBody ProfileCreationRequest request) {
         return userProfileService.createProfile(request);
