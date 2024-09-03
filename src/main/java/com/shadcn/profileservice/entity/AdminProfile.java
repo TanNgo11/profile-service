@@ -1,13 +1,12 @@
 package com.shadcn.profileservice.entity;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-
 import com.shadcn.profileservice.enums.Gender;
 import jakarta.persistence.*;
-
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.io.Serializable;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -17,7 +16,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "user_profile")
-public class UserProfile implements Serializable {
+public class AdminProfile implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;

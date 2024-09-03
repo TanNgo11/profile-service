@@ -11,14 +11,12 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
+import static com.shadcn.profileservice.constant.PathConstant.PUBLIC_ENDPOINTS;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-    private static final String[] PUBLIC_ENDPOINTS = {
-        "/users", "/swagger-ui/**", "/v3/api-docs/**",
-    };
-
     @Autowired
     private CustomJwtDecoder customJwtDecoder;
 

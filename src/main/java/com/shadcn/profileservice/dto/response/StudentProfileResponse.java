@@ -8,14 +8,13 @@ import lombok.experimental.FieldDefaults;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserProfileResponse implements Serializable {
+public class StudentProfileResponse implements Serializable {
     String userId;
     String id;
     String firstName;

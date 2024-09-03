@@ -1,20 +1,18 @@
 package com.shadcn.profileservice.dto.request;
 
-import java.time.LocalDate;
-
 import com.shadcn.profileservice.enums.Gender;
-import com.shadcn.profileservice.enums.Status;
 import com.shadcn.profileservice.validator.DobConstraint;
-
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.time.LocalDate;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ProfileCreationRequest {
+public class AdminProfileCreationRequest {
     String userId;
     String firstName;
     String lastName;
