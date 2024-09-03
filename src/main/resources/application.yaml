@@ -22,5 +22,5 @@ spring:
     type: redis
   data:
     redis:
-      url: rediss://:${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}
+      url: redis://:${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}
       timeout: 200000ms
