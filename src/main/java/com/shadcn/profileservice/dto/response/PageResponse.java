@@ -1,17 +1,17 @@
 package com.shadcn.profileservice.dto.response;
 
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder(toBuilder = true)
-public class PageResponse<T>  implements Serializable {
+public class PageResponse<T> implements Serializable {
     int current;
     int totalPages;
     int pageSize;

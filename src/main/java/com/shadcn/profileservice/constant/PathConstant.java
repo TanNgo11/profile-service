@@ -7,15 +7,15 @@ public class PathConstant {
     public static final String PROFILE = API_V1 + "/profile";
 
     public static final String[] PUBLIC_ENDPOINTS = {
-            API_V1_USERS + "/student",
-            API_V1_USERS + "/teacher",
-            API_V1_USERS + "/admin",
-            API_V1_USERS + "/student/**",
-            API_V1_USERS + "/teacher/**",
-            API_V1_USERS + "/admin/**",
-            API_V1_USERS,
-            API_V1_USERS + "/**",
-            "/swagger-ui/**",
-            "/v3/api-docs/**",
+        API_V1_USERS + "/student",
+        API_V1_USERS + "/teacher",
+        API_V1_USERS + "/admin",
+        API_V1_USERS + "/student/**",
+        API_V1_USERS + "/teacher/**",
+        API_V1_USERS + "/admin/**",
+        API_V1_USERS,
+        API_V1_USERS + "/**",
+        "/swagger-ui/**",
+        "/v3/api-docs/**",
     };
 }

@@ -27,7 +27,10 @@ public enum ErrorCode {
     NOTIFICATION_NOT_EXISTED(1016, "Notification code not existed", HttpStatus.BAD_REQUEST),
     USER_INACTIVE(1017, "User have been deleted", HttpStatus.BAD_REQUEST),
     PAYMENT_FAILED(1018, "Payment failed", HttpStatus.BAD_REQUEST),
-    INVALID_PAGE_PARAMETER(1019, "Invalid page parameter", HttpStatus.BAD_REQUEST);
+    INVALID_PAGE_PARAMETER(1019, "Invalid page parameter", HttpStatus.BAD_REQUEST),
+    ADMIN_NOT_EXISTED(1020, "Admin not existed", HttpStatus.BAD_REQUEST),
+    STUDENT_NOT_EXISTED(1021, "Student not existed", HttpStatus.BAD_REQUEST),
+    TEACHER_NOT_EXISTED(1022, "Teacher not existed", HttpStatus.BAD_REQUEST);
 
     private int code;
     private String message;

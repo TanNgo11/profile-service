@@ -1,13 +1,14 @@
 package com.shadcn.profileservice.dto.response;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import com.shadcn.profileservice.enums.Gender;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
+import java.io.*;
+import java.time.*;
 
-import java.io.Serializable;
-import java.time.LocalDate;
+import com.fasterxml.jackson.databind.annotation.*;
+import com.fasterxml.jackson.datatype.jsr310.ser.*;
+import com.shadcn.profileservice.enums.*;
+
+import lombok.*;
+import lombok.experimental.*;
 
 @Data
 @Builder
@@ -15,7 +16,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AdminProfileResponse implements Serializable {
-    String userId;
+
+    String adminId;
     String id;
     String firstName;
     String lastName;
