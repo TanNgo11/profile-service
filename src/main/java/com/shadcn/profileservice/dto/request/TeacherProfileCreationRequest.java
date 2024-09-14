@@ -1,11 +1,14 @@
 package com.shadcn.profileservice.dto.request;
 
+import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.*;
+import com.shadcn.profileservice.entity.*;
 import com.shadcn.profileservice.enums.Gender;
 import com.shadcn.profileservice.validator.DobConstraint;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDate;
 
 @Data
 @Builder
@@ -13,7 +16,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TeacherProfileCreationRequest {
-    String userId;
+
     String firstName;
     String lastName;
     String email;
@@ -22,7 +25,8 @@ public class TeacherProfileCreationRequest {
     String address;
 
     @DobConstraint(min = 18, message = "INVALID_DOB")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     LocalDate dateOfBirth;
 
-
+    String avatar;
 }

@@ -1,12 +1,14 @@
 package com.shadcn.profileservice.entity;
 
-import com.shadcn.profileservice.enums.Gender;
-import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
+import java.io.*;
+import java.time.*;
 
-import java.io.Serializable;
-import java.time.LocalDate;
+import jakarta.persistence.*;
+
+import com.shadcn.profileservice.enums.*;
+
+import lombok.*;
+import lombok.experimental.*;
 
 @Getter
 @Setter
@@ -15,21 +17,41 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "user_profile")
-public class TeacherProfile implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+@Table(name = "teacher_profile")
+public class TeacherProfile extends BaseEntity implements Serializable {
+    @Column(unique = true)
+    String teacherId;
 
-    String userId;
+    LocalDate hireDate;
+
+    String department;
+
+    String major;
+
+    Double salary;
+
+    String officeHours;
+
+    String address;
+
+    String emergencyContactName;
+
+    String emergencyContactPhoneNumber;
 
     String firstName;
+
     String lastName;
+
     LocalDate dateOfBirth;
+
+    @Column(unique = true)
     String phoneNumber;
+
     @Enumerated(EnumType.STRING)
     Gender gender;
-    String address;
+
+    @Column(unique = true)
     String email;
+
     String avatar;
 }

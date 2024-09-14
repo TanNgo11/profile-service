@@ -1,31 +1,35 @@
 package com.shadcn.profileservice.dto.request;
 
-import java.time.LocalDate;
+import java.time.*;
+
+import jakarta.persistence.*;
 
 import com.fasterxml.jackson.annotation.*;
-import com.shadcn.profileservice.entity.*;
-import com.shadcn.profileservice.enums.Gender;
-import com.shadcn.profileservice.validator.DobConstraint;
+import com.shadcn.profileservice.enums.*;
+import com.shadcn.profileservice.validator.*;
 
 import lombok.*;
-import lombok.experimental.FieldDefaults;
+import lombok.experimental.*;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class StudentProfileCreationRequest {
+public class BaseUpdateProfile {
+
     String firstName;
     String lastName;
     String email;
     String phoneNumber;
-    Gender gender;
     String address;
 
     @DobConstraint(min = 18, message = "INVALID_DOB")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     LocalDate dateOfBirth;
+
+    @Enumerated(EnumType.STRING)
+    Gender gender;
 
     String avatar;
 }
