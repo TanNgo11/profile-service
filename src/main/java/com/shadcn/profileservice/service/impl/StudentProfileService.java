@@ -6,6 +6,10 @@ import jakarta.transaction.*;
 
 import org.springframework.cache.annotation.*;
 import org.springframework.data.domain.*;
+import org.springframework.security.core.*;
+import org.springframework.security.core.context.*;
+import org.springframework.security.oauth2.jwt.*;
+
 import org.springframework.stereotype.*;
 
 import com.shadcn.profileservice.dto.request.*;
@@ -16,6 +20,8 @@ import com.shadcn.profileservice.mapper.*;
 import com.shadcn.profileservice.repository.*;
 import com.shadcn.profileservice.service.*;
 import com.shadcn.profileservice.util.*;
+import com.shadcn.profileservice.validator.*;
+
 
 import lombok.*;
 import lombok.experimental.*;
@@ -28,8 +34,9 @@ import lombok.extern.slf4j.*;
 public class StudentProfileService implements IStudentProfileService {
 
     UserProfileMapper userProfileMapper;
-
     private final StudentProfileRepository studentProfileRepository;
+    private final AuthorizeUser authorizeUser;
+
 
     @Override
     @CacheEvict(value = "profiles", allEntries = true)
@@ -65,15 +72,16 @@ public class StudentProfileService implements IStudentProfileService {
     @Transactional
     @CacheEvict(value = "studentProfiles", allEntries = true)
     @CachePut(value = "studentProfiles", key = "#id")
-    public void updatStudentProfile(String id, UpdateStudentProfileRequest request) {
-        studentProfileRepository.findByStudentId(id).orElseThrow(() -> new AppException(ErrorCode.STUDENT_NOT_EXISTED));
-        StudentProfile studentProfile = userProfileMapper.toStudentProfile(request);
+    public void updateStudentProfile(String id, UpdateStudentProfileRequest request) {
+        StudentProfile existingProfile = studentProfileRepository
+                .findByStudentId(id)
+                .orElseThrow(() -> new AppException(ErrorCode.STUDENT_NOT_EXISTED));
+        authorizeUser.checkAuthorizeUser(existingProfile.getStudentId());
 
-        userProfileMapper.updateStudentProfileFromRequest(request, studentProfile);
+        userProfileMapper.updateStudentProfileFromRequest(request, existingProfile);
 
-        studentProfileRepository.save(studentProfile);
+        studentProfileRepository.save(existingProfile);
 
-        userProfileMapper.toStudentProfileReponse(studentProfile);
     }
 
     private String generateStudentId() {

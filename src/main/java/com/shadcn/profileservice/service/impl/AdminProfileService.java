@@ -16,6 +16,8 @@ import com.shadcn.profileservice.mapper.*;
 import com.shadcn.profileservice.repository.*;
 import com.shadcn.profileservice.service.*;
 import com.shadcn.profileservice.util.*;
+import com.shadcn.profileservice.validator.*;
+
 
 import lombok.*;
 import lombok.experimental.*;
@@ -29,11 +31,12 @@ public class AdminProfileService implements IAdminProfileService {
 
     UserProfileMapper userProfileMapper;
     private final AdminProfileRepository adminProfileRepository;
+    private final AuthorizeUser authorizeUser;
 
     /*
-    	If want to use cache, uncomment the following code and return the response from the cache
-    	Example: return userProfileMapper.toAdminProfileReponse(adminProfile);
-    * **/
+    	If you want to use cache, uncomment the following code and return the response from the cache
+    	Example: return userProfileMapper.toAdminProfileResponse(adminProfile);
+
     //    @CachePut(value = "profiles", key = "#result.id")
     @CacheEvict(value = "adminProfiles", allEntries = true)
     @Override
@@ -72,14 +75,13 @@ public class AdminProfileService implements IAdminProfileService {
     @CachePut(value = "adminProfiles", key = "#id")
     public void updateAdminProfile(String id, UpdateAdminProfileRequest request) {
 
-        adminProfileRepository.findByAdminId(id).orElseThrow(() -> new AppException(ErrorCode.ADMIN_NOT_EXISTED));
-        AdminProfile adminProfile = userProfileMapper.toAdminProfile(request);
+        AdminProfile existingProfile = adminProfileRepository
+                .findByAdminId(id)
+                .orElseThrow(() -> new AppException(ErrorCode.ADMIN_NOT_EXISTED));
+        authorizeUser.checkAuthorizeUser(existingProfile.getAdminId());
+        userProfileMapper.updateAdminProfileFromRequest(request, existingProfile);
+        adminProfileRepository.save(existingProfile);
 
-        userProfileMapper.updateAdminProfileFromRequest(request, adminProfile);
-
-        adminProfileRepository.save(adminProfile);
-
-        userProfileMapper.toAdminProfileReponse(adminProfile);
     }
 
     private String generateAdminId() {

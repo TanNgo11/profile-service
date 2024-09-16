@@ -24,7 +24,7 @@ public class StudentProfileCreationRequest {
     String address;
 
     @DobConstraint(min = 18, message = "INVALID_DOB")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     LocalDate dateOfBirth;
 
     String avatar;

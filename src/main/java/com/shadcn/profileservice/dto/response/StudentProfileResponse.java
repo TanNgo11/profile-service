@@ -3,10 +3,14 @@ package com.shadcn.profileservice.dto.response;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.shadcn.profileservice.entity.*;
 import com.shadcn.profileservice.enums.Gender;
+import com.shadcn.profileservice.util.*;
+
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -23,6 +27,7 @@ public class StudentProfileResponse implements Serializable {
     String lastName;
 
     @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     LocalDate dateOfBirth;
 
     String city;
