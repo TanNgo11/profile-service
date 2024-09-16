@@ -12,6 +12,7 @@ import com.shadcn.profileservice.service.*;
 import lombok.*;
 import lombok.experimental.*;
 
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(API_V1)

@@ -32,6 +32,7 @@ public class TeacherProfileService implements ITeacherProfileService {
     private final TeacherProfileRepository teacherProfileRepository;
     private final AuthorizeUser authorizeUser;
 
+
     //    @CachePut(value = "teacherProfiles", key = "#result.id")
     @CacheEvict(value = "teacherProfiles", allEntries = true)
     @Override

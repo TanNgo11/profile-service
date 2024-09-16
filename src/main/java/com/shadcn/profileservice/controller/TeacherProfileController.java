@@ -12,6 +12,7 @@ import com.shadcn.profileservice.service.*;
 import lombok.*;
 import lombok.experimental.*;
 
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(API_V1)
@@ -20,6 +21,7 @@ public class TeacherProfileController {
     ITeacherProfileService userProfileService;
 
     @PostMapping("/users/teacher/profile")
+
     @PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
     ApiResponse<Void> createTeacherProfile(@RequestBody TeacherProfileCreationRequest request) {
         userProfileService.createTeacherProfile(request);
@@ -33,6 +35,7 @@ public class TeacherProfileController {
 
     @PutMapping("/users/teacher/profile/{profileId}")
     @PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
+
     ApiResponse<Void> updateTeacherProfile(
             @PathVariable String profileId, @RequestBody UpdateTeacherProfileRequest request) {
         userProfileService.updateTeacherProfile(profileId, request);

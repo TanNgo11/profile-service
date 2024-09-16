@@ -9,6 +9,7 @@ import org.springframework.data.domain.*;
 import org.springframework.security.core.*;
 import org.springframework.security.core.context.*;
 import org.springframework.security.oauth2.jwt.*;
+
 import org.springframework.stereotype.*;
 
 import com.shadcn.profileservice.dto.request.*;
@@ -20,6 +21,7 @@ import com.shadcn.profileservice.repository.*;
 import com.shadcn.profileservice.service.*;
 import com.shadcn.profileservice.util.*;
 import com.shadcn.profileservice.validator.*;
+
 
 import lombok.*;
 import lombok.experimental.*;
@@ -34,6 +36,7 @@ public class StudentProfileService implements IStudentProfileService {
     UserProfileMapper userProfileMapper;
     private final StudentProfileRepository studentProfileRepository;
     private final AuthorizeUser authorizeUser;
+
 
     @Override
     @CacheEvict(value = "profiles", allEntries = true)
@@ -78,6 +81,7 @@ public class StudentProfileService implements IStudentProfileService {
         userProfileMapper.updateStudentProfileFromRequest(request, existingProfile);
 
         studentProfileRepository.save(existingProfile);
+
     }
 
     private String generateStudentId() {
