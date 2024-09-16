@@ -1,29 +1,27 @@
 package com.shadcn.profileservice.dto.response;
 
-import java.io.Serializable;
-import java.time.LocalDate;
+import java.io.*;
+import java.time.*;
 
 import com.fasterxml.jackson.databind.annotation.*;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import com.shadcn.profileservice.enums.Gender;
-import com.shadcn.profileservice.util.*;
+import com.fasterxml.jackson.datatype.jsr310.ser.*;
+import com.shadcn.profileservice.enums.*;
 
 import lombok.*;
-import lombok.experimental.FieldDefaults;
+import lombok.experimental.*;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class StudentProfileResponse implements Serializable {
-    String studentId;
-    String id;
+public class PublicTeacherProfileResponse implements Serializable {
+    String teacherId;
+
     String firstName;
     String lastName;
 
     @JsonSerialize(using = LocalDateSerializer.class)
-    @JsonDeserialize(using = LocalDateDeserializer.class)
     LocalDate dateOfBirth;
 
     String city;

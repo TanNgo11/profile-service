@@ -6,6 +6,7 @@ import java.time.*;
 import jakarta.persistence.*;
 
 import com.shadcn.profileservice.enums.*;
+import com.shadcn.profileservice.validator.*;
 
 import lombok.*;
 import lombok.experimental.*;
@@ -40,6 +41,7 @@ public class StudentProfile extends BaseEntity implements Serializable {
 
     String lastName;
 
+    @DobConstraint(min = 10, message = "INVALID_DOB")
     LocalDate dateOfBirth;
 
     @Column(unique = true)

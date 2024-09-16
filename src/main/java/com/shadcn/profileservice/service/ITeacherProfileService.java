@@ -9,7 +9,9 @@ public interface ITeacherProfileService {
 
     void updateTeacherProfile(String id, UpdateTeacherProfileRequest request);
 
-    TeacherProfileResponse getTeacherProfile(String id);
+    TeacherProfileResponse getTeacherProfileById(String id);
+
+    TeacherProfileResponse getPublicTeacherProfile(String id);
 
     PageResponse<TeacherProfileResponse> getAllTeacherProfiles(int current, int pageSize);
 }

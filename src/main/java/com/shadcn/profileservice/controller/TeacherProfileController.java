@@ -1,14 +1,16 @@
 package com.shadcn.profileservice.controller;
 
-import com.shadcn.profileservice.dto.request.*;
-import com.shadcn.profileservice.dto.response.*;
-import com.shadcn.profileservice.service.*;
-import lombok.*;
-import lombok.experimental.*;
+import static com.shadcn.profileservice.constant.PathConstant.*;
+
 import org.springframework.security.access.prepost.*;
 import org.springframework.web.bind.annotation.*;
 
-import static com.shadcn.profileservice.constant.PathConstant.*;
+import com.shadcn.profileservice.dto.request.*;
+import com.shadcn.profileservice.dto.response.*;
+import com.shadcn.profileservice.service.*;
+
+import lombok.*;
+import lombok.experimental.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,29 +19,20 @@ import static com.shadcn.profileservice.constant.PathConstant.*;
 public class TeacherProfileController {
     ITeacherProfileService userProfileService;
 
-    @PostMapping("/users/teacher")
+    @PostMapping("/users/teacher/profile")
     @PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
     ApiResponse<Void> createTeacherProfile(@RequestBody TeacherProfileCreationRequest request) {
         userProfileService.createTeacherProfile(request);
         return ApiResponse.empty();
     }
 
-    @GetMapping("/users/teacher/{profileId}")
+    @GetMapping("/users/teacher/profile/{profileId}")
+    ApiResponse<TeacherProfileResponse> getPublicTeacherProfile(@PathVariable String profileId) {
+        return ApiResponse.success(userProfileService.getTeacherProfileById(profileId));
+    }
+
+    @PutMapping("/users/teacher/profile/{profileId}")
     @PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
-    ApiResponse<TeacherProfileResponse> getTeacherProfile(@PathVariable String profileId) {
-        return ApiResponse.success(userProfileService.getTeacherProfile(profileId));
-    }
-
-    @GetMapping("/users/teacher")
-    @PreAuthorize("hasRole('ADMIN')")
-    ApiResponse<PageResponse<TeacherProfileResponse>> getAllTeacherProfiles(
-            @RequestParam(defaultValue = "1", required = false) Integer current,
-            @RequestParam(defaultValue = "10", required = false) Integer pageSize) {
-        return ApiResponse.success(userProfileService.getAllTeacherProfiles(current, pageSize));
-    }
-
-    @PutMapping("/users/teacher/{profileId}")
-    @PreAuthorize("hasRole('TEACHER')or hasRole('ADMIN')")
     ApiResponse<Void> updateTeacherProfile(
             @PathVariable String profileId, @RequestBody UpdateTeacherProfileRequest request) {
         userProfileService.updateTeacherProfile(profileId, request);

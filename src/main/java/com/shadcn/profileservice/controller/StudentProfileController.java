@@ -1,14 +1,16 @@
 package com.shadcn.profileservice.controller;
 
-import com.shadcn.profileservice.dto.request.*;
-import com.shadcn.profileservice.dto.response.*;
-import com.shadcn.profileservice.service.*;
-import lombok.*;
-import lombok.experimental.*;
+import static com.shadcn.profileservice.constant.PathConstant.*;
+
 import org.springframework.security.access.prepost.*;
 import org.springframework.web.bind.annotation.*;
 
-import static com.shadcn.profileservice.constant.PathConstant.*;
+import com.shadcn.profileservice.dto.request.*;
+import com.shadcn.profileservice.dto.response.*;
+import com.shadcn.profileservice.service.*;
+
+import lombok.*;
+import lombok.experimental.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,30 +19,22 @@ import static com.shadcn.profileservice.constant.PathConstant.*;
 public class StudentProfileController {
     IStudentProfileService userProfileService;
 
-    @PostMapping("/users/student")
+    @PostMapping("/users/student/profile")
     ApiResponse<Void> createStudentProfile(@RequestBody StudentProfileCreationRequest request) {
         userProfileService.createStudentProfile(request);
         return ApiResponse.empty();
     }
 
-    @GetMapping("/users/student/{profileId}")
+    @GetMapping("/users/student/profile/{profileId}")
     ApiResponse<StudentProfileResponse> getStudentProfile(@PathVariable String profileId) {
         return ApiResponse.success(userProfileService.getStudentProfile(profileId));
     }
 
-    @GetMapping("/users/student")
-    @PreAuthorize("hasRole('ADMIN')")
-    ApiResponse<PageResponse<StudentProfileResponse>> getAllStudentProfiles(
-            @RequestParam(defaultValue = "1", required = false) Integer current,
-            @RequestParam(defaultValue = "10", required = false) Integer pageSize) {
-        return ApiResponse.success(userProfileService.getAllStudentProfiles(current, pageSize));
-    }
-
-    @PutMapping("/users/student/{profileId}")
+    @PutMapping("/users/student/profile/{profileId}")
     @PreAuthorize("hasRole('STUDENT')or hasRole('ADMIN')")
     ApiResponse<Void> updateStudentProfile(
             @PathVariable String profileId, @RequestBody UpdateStudentProfileRequest request) {
-        userProfileService.updatStudentProfile(profileId, request);
+        userProfileService.updateStudentProfile(profileId, request);
         return ApiResponse.empty();
     }
 }

@@ -16,6 +16,7 @@ import com.shadcn.profileservice.mapper.*;
 import com.shadcn.profileservice.repository.*;
 import com.shadcn.profileservice.service.*;
 import com.shadcn.profileservice.util.*;
+import com.shadcn.profileservice.validator.*;
 
 import lombok.*;
 import lombok.experimental.*;
@@ -29,6 +30,7 @@ public class TeacherProfileService implements ITeacherProfileService {
 
     UserProfileMapper userProfileMapper;
     private final TeacherProfileRepository teacherProfileRepository;
+    private final AuthorizeUser authorizeUser;
 
     //    @CachePut(value = "teacherProfiles", key = "#result.id")
     @CacheEvict(value = "teacherProfiles", allEntries = true)
@@ -47,19 +49,31 @@ public class TeacherProfileService implements ITeacherProfileService {
     @CacheEvict(value = "teacherProfiles", allEntries = true)
     @CachePut(value = "teacherProfiles", key = "#id")
     public void updateTeacherProfile(String id, UpdateTeacherProfileRequest request) {
-        teacherProfileRepository.findByTeacherId(id).orElseThrow(() -> new AppException(ErrorCode.TEACHER_NOT_EXISTED));
-        TeacherProfile teacherProfile = userProfileMapper.toTeacherProfile(request);
-        userProfileMapper.updateTeacherProfileFromRequest(request, teacherProfile);
-        teacherProfileRepository.save(teacherProfile);
-        userProfileMapper.toTeacherProfileReponse(teacherProfile);
-    }
-
-    @Override
-    public TeacherProfileResponse getTeacherProfile(String id) {
-        TeacherProfile teacherProfile = teacherProfileRepository
+        TeacherProfile existingProfile = teacherProfileRepository
                 .findByTeacherId(id)
                 .orElseThrow(() -> new AppException(ErrorCode.TEACHER_NOT_EXISTED));
 
+        authorizeUser.checkAuthorizeUser(existingProfile.getTeacherId());
+        userProfileMapper.updateTeacherProfileFromRequest(request, existingProfile);
+        teacherProfileRepository.save(existingProfile);
+    }
+
+    @Override
+    public TeacherProfileResponse getTeacherProfileById(String id) {
+
+        TeacherProfile teacherProfile = teacherProfileRepository
+                .findByTeacherId(id)
+                .orElseThrow(() -> new AppException(ErrorCode.TEACHER_NOT_EXISTED));
+        authorizeUser.checkAuthorizeUser(teacherProfile.getTeacherId());
+        return userProfileMapper.toTeacherProfileReponse(teacherProfile);
+    }
+
+    @Override
+    public TeacherProfileResponse getPublicTeacherProfile(String id) {
+        TeacherProfile teacherProfile = teacherProfileRepository
+                .findByTeacherId(id)
+                .orElseThrow(() -> new AppException(ErrorCode.TEACHER_NOT_EXISTED));
+        authorizeUser.checkAuthorizeUser(teacherProfile.getTeacherId());
         return userProfileMapper.toTeacherProfileReponse(teacherProfile);
     }
 
