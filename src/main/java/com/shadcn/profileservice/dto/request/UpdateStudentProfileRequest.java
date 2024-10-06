@@ -7,6 +7,7 @@ import lombok.experimental.*;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper=false)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UpdateStudentProfileRequest extends BaseUpdateProfile {
 

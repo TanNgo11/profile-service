@@ -1,31 +1,31 @@
 package com.shadcn.profileservice.service.impl;
 
-import java.time.*;
+import com.shadcn.profileservice.dto.request.StudentProfileCreationRequest;
+import com.shadcn.profileservice.dto.request.UpdateStudentProfileRequest;
+import com.shadcn.profileservice.dto.response.PageResponse;
+import com.shadcn.profileservice.dto.response.StudentProfileResponse;
+import com.shadcn.profileservice.entity.StudentProfile;
+import com.shadcn.profileservice.exception.AppException;
+import com.shadcn.profileservice.exception.ErrorCode;
+import com.shadcn.profileservice.mapper.UserProfileMapper;
+import com.shadcn.profileservice.repository.StudentProfileRepository;
+import com.shadcn.profileservice.service.IStudentProfileService;
+import com.shadcn.profileservice.util.ConverToPaginationResponse;
+import com.shadcn.profileservice.validator.AuthorizeUser;
+import jakarta.transaction.Transactional;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
-import jakarta.transaction.*;
-
-import org.springframework.cache.annotation.*;
-import org.springframework.data.domain.*;
-import org.springframework.security.core.*;
-import org.springframework.security.core.context.*;
-import org.springframework.security.oauth2.jwt.*;
-
-import org.springframework.stereotype.*;
-
-import com.shadcn.profileservice.dto.request.*;
-import com.shadcn.profileservice.dto.response.*;
-import com.shadcn.profileservice.entity.*;
-import com.shadcn.profileservice.exception.*;
-import com.shadcn.profileservice.mapper.*;
-import com.shadcn.profileservice.repository.*;
-import com.shadcn.profileservice.service.*;
-import com.shadcn.profileservice.util.*;
-import com.shadcn.profileservice.validator.*;
-
-
-import lombok.*;
-import lombok.experimental.*;
-import lombok.extern.slf4j.*;
+import java.time.Year;
 
 @Service
 @RequiredArgsConstructor
@@ -37,10 +37,12 @@ public class StudentProfileService implements IStudentProfileService {
     private final StudentProfileRepository studentProfileRepository;
     private final AuthorizeUser authorizeUser;
 
-
     @Override
     @CacheEvict(value = "profiles", allEntries = true)
     public void createStudentProfile(StudentProfileCreationRequest request) {
+        if(studentProfileRepository.existsByPhoneNumber(request.getPhoneNumber()))
+            throw new AppException(ErrorCode.PHONE_EXISTED);
+
         StudentProfile studentProfile = userProfileMapper.toStudentProfile(request);
         studentProfile.setStudentId(generateStudentId());
         studentProfile = studentProfileRepository.save(studentProfile);
@@ -81,7 +83,6 @@ public class StudentProfileService implements IStudentProfileService {
         userProfileMapper.updateStudentProfileFromRequest(request, existingProfile);
 
         studentProfileRepository.save(existingProfile);
-
     }
 
     private String generateStudentId() {

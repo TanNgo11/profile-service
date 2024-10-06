@@ -30,11 +30,12 @@ public enum ErrorCode {
     INVALID_PAGE_PARAMETER(1019, "Invalid page parameter", HttpStatus.BAD_REQUEST),
     ADMIN_NOT_EXISTED(1020, "Admin not existed", HttpStatus.BAD_REQUEST),
     STUDENT_NOT_EXISTED(1021, "Student not existed", HttpStatus.BAD_REQUEST),
-    TEACHER_NOT_EXISTED(1022, "Teacher not existed", HttpStatus.BAD_REQUEST);
+    TEACHER_NOT_EXISTED(1022, "Teacher not existed", HttpStatus.BAD_REQUEST),
+    PHONE_EXISTED(1023, "Phone number existed", HttpStatus.BAD_REQUEST);
 
-    private int code;
-    private String message;
-    private HttpStatusCode statusCode;
+    private final int code;
+    private final String message;
+    private final HttpStatusCode statusCode;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;
