@@ -18,7 +18,6 @@ import com.shadcn.profileservice.service.*;
 import com.shadcn.profileservice.util.*;
 import com.shadcn.profileservice.validator.*;
 
-
 import lombok.*;
 import lombok.experimental.*;
 import lombok.extern.slf4j.*;
@@ -36,7 +35,7 @@ public class AdminProfileService implements IAdminProfileService {
     /*
     	If you want to use cache, uncomment the following code and return the response from the cache
     	Example: return userProfileMapper.toAdminProfileResponse(adminProfile);
-
+    **/
     //    @CachePut(value = "profiles", key = "#result.id")
     @CacheEvict(value = "adminProfiles", allEntries = true)
     @Override
@@ -81,7 +80,6 @@ public class AdminProfileService implements IAdminProfileService {
         authorizeUser.checkAuthorizeUser(existingProfile.getAdminId());
         userProfileMapper.updateAdminProfileFromRequest(request, existingProfile);
         adminProfileRepository.save(existingProfile);
-
     }
 
     private String generateAdminId() {

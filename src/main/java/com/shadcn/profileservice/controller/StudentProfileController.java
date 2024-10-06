@@ -12,7 +12,6 @@ import com.shadcn.profileservice.service.*;
 import lombok.*;
 import lombok.experimental.*;
 
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(API_V1)
@@ -20,18 +19,18 @@ import lombok.experimental.*;
 public class StudentProfileController {
     IStudentProfileService userProfileService;
 
-    @PostMapping("/users/student/profile")
+    @PostMapping("/users/student")
     ApiResponse<Void> createStudentProfile(@RequestBody StudentProfileCreationRequest request) {
         userProfileService.createStudentProfile(request);
         return ApiResponse.empty();
     }
 
-    @GetMapping("/users/student/profile/{profileId}")
+    @GetMapping("/users/student/{profileId}")
     ApiResponse<StudentProfileResponse> getStudentProfile(@PathVariable String profileId) {
         return ApiResponse.success(userProfileService.getStudentProfile(profileId));
     }
 
-    @PutMapping("/users/student/profile/{profileId}")
+    @PutMapping("/users/student/{profileId}")
     @PreAuthorize("hasRole('STUDENT')or hasRole('ADMIN')")
     ApiResponse<Void> updateStudentProfile(
             @PathVariable String profileId, @RequestBody UpdateStudentProfileRequest request) {

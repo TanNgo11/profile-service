@@ -32,11 +32,16 @@ public class TeacherProfileService implements ITeacherProfileService {
     private final TeacherProfileRepository teacherProfileRepository;
     private final AuthorizeUser authorizeUser;
 
-
     //    @CachePut(value = "teacherProfiles", key = "#result.id")
     @CacheEvict(value = "teacherProfiles", allEntries = true)
     @Override
     public void createTeacherProfile(TeacherProfileCreationRequest request) {
+//        if (teacherProfileRepository.findByPhone(request.getPhoneNumber()).isPresent()) {
+//            throw new AppException(ErrorCode.PHONE_EXISTED);
+//        }
+//        if (teacherProfileRepository.findByEmail(request.getEmail()).isPresent()) {
+//            throw new AppException(ErrorCode.EMAIL_EXISTED);
+//        }
 
         TeacherProfile teacherProfile = userProfileMapper.toTeacherProfile(request);
         teacherProfile.setTeacherId(generateTeacherId());
