@@ -25,7 +25,7 @@ public class TeacherProfileCreationRequest {
     String address;
 
     @DobConstraint(min = 18, message = "INVALID_DOB")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @JsonFormat(pattern = "dd-MM-yyyy")
     LocalDate dateOfBirth;
 
     String avatar;

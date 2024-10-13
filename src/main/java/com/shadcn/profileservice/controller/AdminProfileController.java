@@ -47,14 +47,14 @@ public class AdminProfileController {
         return ApiResponse.empty();
     }
 
-    @GetMapping("/users/student")
+    @GetMapping("/users/students")
     ApiResponse<PageResponse<StudentProfileResponse>> getAllStudentProfiles(
             @RequestParam(defaultValue = "1", required = false) Integer current,
             @RequestParam(defaultValue = "10", required = false) Integer pageSize) {
         return ApiResponse.success(studentProfileService.getAllStudentProfiles(current, pageSize));
     }
 
-    @GetMapping("/users/teacher")
+    @GetMapping("/users/teachers")
     ApiResponse<PageResponse<TeacherProfileResponse>> getAllTeacherProfiles(
             @RequestParam(defaultValue = "1", required = false) Integer current,
             @RequestParam(defaultValue = "10", required = false) Integer pageSize) {
