@@ -31,7 +31,7 @@ public class StudentProfileController {
     }
 
     @PutMapping("/users/student/{profileId}")
-    @PreAuthorize("hasRole('STUDENT')or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
     ApiResponse<Void> updateStudentProfile(
             @PathVariable String profileId, @RequestBody UpdateStudentProfileRequest request) {
         userProfileService.updateStudentProfile(profileId, request);
