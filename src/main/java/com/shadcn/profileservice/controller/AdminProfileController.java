@@ -16,9 +16,11 @@ import lombok.experimental.*;
 @RequiredArgsConstructor
 @RequestMapping(API_V1)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@PreAuthorize("hasRole('ADMIN')")
 public class AdminProfileController {
     IAdminProfileService adminProfileService;
-   
+    IStudentProfileService studentProfileService;
+    ITeacherProfileService teacherProfileService;
 
     @PostMapping("/users/admin")
     @PreAuthorize("hasRole('ADMIN')")
