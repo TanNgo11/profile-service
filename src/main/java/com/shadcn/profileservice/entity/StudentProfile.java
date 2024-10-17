@@ -4,6 +4,7 @@ import java.io.*;
 import java.time.*;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 
 import com.shadcn.profileservice.enums.*;
 import com.shadcn.profileservice.validator.*;
@@ -23,23 +24,16 @@ public class StudentProfile extends BaseEntity implements Serializable {
     @Column(unique = true)
     String studentId;
 
-    String grade;
+    @Column(unique = true)
+    String username;
 
-    LocalDate enrollmentDate;
-
-    String major;
-
-    String advisorId;
-
-    String guardianName;
-
-    String guardianPhoneNumber;
-
-    String address;
+    String courseId;
 
     String firstName;
 
     String lastName;
+
+    String address;
 
     @DobConstraint(min = 10, message = "INVALID_DOB")
     LocalDate dateOfBirth;
@@ -50,8 +44,33 @@ public class StudentProfile extends BaseEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     Gender gender;
 
-    @Column(unique = true)
+    String grade;
+
+    LocalDate enrollmentDate;
+
+    String major;
+
+    String guardianName;
+
+    String guardianPhoneNumber;
+
     String email;
 
-    String avatar;
+    String avatarPath;
+    // 54 dân tộc :)))
+    String nation;
+
+    String religion;
+
+    String citizenId;
+    // At the moment just have Information technology and Business Administration
+    String faculty;
+    // Ex: Đại học chính quy Tiếng Việt K10
+    String degreeLevel;
+
+    @Pattern(regexp = "^2\\d{3}-2\\d{3}$", message = "School year must be between 2000-2099")
+    String schoolYear;
+
+    @Enumerated(EnumType.STRING)
+    Present present;
 }

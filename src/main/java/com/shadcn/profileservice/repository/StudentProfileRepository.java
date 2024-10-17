@@ -8,13 +8,12 @@ import org.springframework.stereotype.Repository;
 import com.shadcn.profileservice.entity.StudentProfile;
 
 @Repository
-public interface StudentProfileRepository
-        extends JpaRepository<StudentProfile, String> {
+public interface StudentProfileRepository extends JpaRepository<StudentProfile, String> {
     StudentProfile findTopByOrderByIdDesc();
 
     Optional<StudentProfile> findByStudentId(String userId);
 
-    boolean existsByPhoneNumber(String phone);
+    Optional<StudentProfile> findByUsername(String username);
 
-    boolean existsByEmail(String email);
+    boolean existsByPhoneNumber(String phone);
 }

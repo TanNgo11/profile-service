@@ -8,7 +8,7 @@ public interface IStudentProfileService {
 
     void updateStudentProfile(String id, UpdateStudentProfileRequest request);
 
-    StudentProfileResponse getStudentProfile(String id);
+    StudentProfileResponse getStudentProfileByUsername(String username);
 
     PageResponse<StudentProfileResponse> getAllStudentProfiles(int current, int pageSize);
 }

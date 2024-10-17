@@ -25,7 +25,7 @@ public class BaseUpdateProfile {
     String address;
 
     @DobConstraint(min = 18, message = "INVALID_DOB")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     LocalDate dateOfBirth;
 
     @Enumerated(EnumType.STRING)

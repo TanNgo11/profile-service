@@ -21,6 +21,8 @@ public class TeacherProfileCreationRequest {
     String lastName;
     String email;
     String phoneNumber;
+    String username;
+
     Gender gender;
     String address;
 

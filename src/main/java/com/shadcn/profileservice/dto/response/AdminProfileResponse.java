@@ -3,6 +3,7 @@ package com.shadcn.profileservice.dto.response;
 import java.io.*;
 import java.time.*;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.*;
 import com.fasterxml.jackson.datatype.jsr310.ser.*;
 import com.shadcn.profileservice.enums.*;
@@ -29,4 +30,15 @@ public class AdminProfileResponse implements Serializable {
     String phoneNumber;
     Gender gender;
     String address;
+
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    LocalDate hireDate;
+
+    String department;
+
+    String major;
+
+    Double salary;
+
+    String officeHours;
 }

@@ -26,9 +26,14 @@ public class TeacherProfileController {
         return ApiResponse.empty();
     }
 
-    @GetMapping("/users/teacher/public/{profileId}")
-    ApiResponse<TeacherProfileResponse> getPublicTeacherProfile(@PathVariable String profileId) {
-        return ApiResponse.success(userProfileService.getTeacherProfileById(profileId));
+    @GetMapping("/users/teacher/public/{username}")
+    ApiResponse<TeacherProfileResponse> getPublicTeacherProfile(@PathVariable String username) {
+        return ApiResponse.success(userProfileService.getPublicTeacherProfile(username));
+    }
+
+    @GetMapping("/users/teacher/{username}")
+    ApiResponse<TeacherProfileResponse> getTeacherProfileByUsername(@PathVariable String username) {
+        return ApiResponse.success(userProfileService.getTeacherProfileByUsername(username));
     }
 
     @PutMapping("/users/teacher/{profileId}")

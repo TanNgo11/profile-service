@@ -25,16 +25,16 @@ public class StudentProfileController {
         return ApiResponse.empty();
     }
 
-    @GetMapping("/users/student/{profileId}")
-    ApiResponse<StudentProfileResponse> getStudentProfile(@PathVariable String profileId) {
-        return ApiResponse.success(userProfileService.getStudentProfile(profileId));
+    @GetMapping("/users/student/{username}")
+    ApiResponse<StudentProfileResponse> getStudentProfileByUsername(@PathVariable String username) {
+        return ApiResponse.success(userProfileService.getStudentProfileByUsername(username));
     }
 
-    @PutMapping("/users/student/{profileId}")
+    @PutMapping("/users/student/{studentId}")
     @PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
     ApiResponse<Void> updateStudentProfile(
-            @PathVariable String profileId, @RequestBody UpdateStudentProfileRequest request) {
-        userProfileService.updateStudentProfile(profileId, request);
+            @PathVariable String studentId, @RequestBody UpdateStudentProfileRequest request) {
+        userProfileService.updateStudentProfile(studentId, request);
         return ApiResponse.empty();
     }
 }
