@@ -7,7 +7,7 @@ public interface IAdminProfileService {
 
     void createAdminProfile(AdminProfileCreationRequest request);
 
-    AdminProfileResponse getAdminProfile(String id);
+    AdminProfileResponse getAdminProfileByUsername(String username);
 
     PageResponse<AdminProfileResponse> getAllAdminProfiles(int current, int pageSize);
 

@@ -29,29 +29,26 @@ import lombok.extern.slf4j.*;
 public class AdminProfileService implements IAdminProfileService {
 
     UserProfileMapper userProfileMapper;
-    private final AdminProfileRepository adminProfileRepository;
-    private final AuthorizeUser authorizeUser;
+    AdminProfileRepository adminProfileRepository;
+    AuthorizeUser authorizeUser;
 
-    /*
-    	If you want to use cache, uncomment the following code and return the response from the cache
-    	Example: return userProfileMapper.toAdminProfileResponse(adminProfile);
-    **/
-    //    @CachePut(value = "profiles", key = "#result.id")
+
     @CacheEvict(value = "adminProfiles", allEntries = true)
     @Override
     @Transactional
     public void createAdminProfile(AdminProfileCreationRequest request) {
+        if (adminProfileRepository.existsByPhoneNumber(request.getPhoneNumber()))
+            throw new AppException(ErrorCode.PHONE_EXISTED);
+
         AdminProfile adminProfile = userProfileMapper.toAdminProfile(request);
         adminProfile.setAdminId(generateAdminId());
-        adminProfile = adminProfileRepository.save(adminProfile);
-
-        userProfileMapper.toAdminProfileReponse(adminProfile);
+        adminProfileRepository.save(adminProfile);
     }
 
     @Override
-    public AdminProfileResponse getAdminProfile(String id) {
+    public AdminProfileResponse getAdminProfileByUsername(String username) {
         AdminProfile adminProfile = adminProfileRepository
-                .findByAdminId(id)
+                .findByUsername(username)
                 .orElseThrow(() -> new AppException(ErrorCode.ADMIN_NOT_EXISTED));
 
         return userProfileMapper.toAdminProfileReponse(adminProfile);
@@ -77,7 +74,7 @@ public class AdminProfileService implements IAdminProfileService {
         AdminProfile existingProfile = adminProfileRepository
                 .findByAdminId(id)
                 .orElseThrow(() -> new AppException(ErrorCode.ADMIN_NOT_EXISTED));
-        authorizeUser.checkAuthorizeUser(existingProfile.getAdminId());
+        authorizeUser.checkAuthorizeUser();
         userProfileMapper.updateAdminProfileFromRequest(request, existingProfile);
         adminProfileRepository.save(existingProfile);
     }

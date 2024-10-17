@@ -23,6 +23,9 @@ public class AdminProfile extends BaseEntity implements Serializable {
     @Column(unique = true)
     String adminId;
 
+    @Column(unique = true)
+    String username;
+
     LocalDate hireDate;
 
     String department;
@@ -49,7 +52,6 @@ public class AdminProfile extends BaseEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     Gender gender;
 
-    @Column(unique = true)
     String email;
 
     String avatar;

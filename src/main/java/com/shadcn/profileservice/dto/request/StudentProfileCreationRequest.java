@@ -20,10 +20,10 @@ public class StudentProfileCreationRequest {
     String lastName;
     String email;
     String phoneNumber;
+    String username;
     Gender gender;
     String address;
 
-    @DobConstraint(min = 18, message = "INVALID_DOB")
     @JsonFormat(pattern = "dd-MM-yyyy")
     LocalDate dateOfBirth;
 

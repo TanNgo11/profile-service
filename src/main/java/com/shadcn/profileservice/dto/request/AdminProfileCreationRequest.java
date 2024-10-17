@@ -28,6 +28,7 @@ public class AdminProfileCreationRequest {
     String lastName;
     String email;
     String phoneNumber;
+    String username;
 
     @Enumerated(EnumType.STRING)
     Gender gender;

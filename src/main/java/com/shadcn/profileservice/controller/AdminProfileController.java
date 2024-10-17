@@ -28,9 +28,9 @@ public class AdminProfileController {
         return ApiResponse.empty();
     }
 
-    @GetMapping("/users/admin/{profileId}")
-    AdminProfileResponse getAdminProfile(@PathVariable String profileId) {
-        return adminProfileService.getAdminProfile(profileId);
+    @GetMapping("/users/admin/{username}")
+    AdminProfileResponse getAdminProfileByUsername(@PathVariable String username) {
+        return adminProfileService.getAdminProfileByUsername(username);
     }
 
     @GetMapping("/users/admin")
@@ -61,8 +61,4 @@ public class AdminProfileController {
         return ApiResponse.success(teacherProfileService.getAllTeacherProfiles(current, pageSize));
     }
 
-    @GetMapping("/users/teacher/{profileId}")
-    ApiResponse<TeacherProfileResponse> getPrivateTeacherProfile(@PathVariable String profileId) {
-        return ApiResponse.success(teacherProfileService.getTeacherProfileById(profileId));
-    }
 }

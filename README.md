@@ -3,5 +3,5 @@ This is a service that manages user profiles. It is a RESTful service that allow
 
 ## How to use?
 To develop this service, you need to notice some points:
-- LocalDate DOB format: yyyy-MM-dd
+- LocalDate DOB format: dd-MM-yyyy
 - 

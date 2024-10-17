@@ -13,4 +13,8 @@ public interface AdminProfileRepository extends JpaRepository<AdminProfile, Stri
     AdminProfile findTopByOrderByIdDesc();
 
     Optional<AdminProfile> findByAdminId(String adminId);
+
+    Optional<AdminProfile> findByUsername(String username);
+
+    boolean existsByPhoneNumber(String phone);
 }

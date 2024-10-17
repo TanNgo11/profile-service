@@ -22,6 +22,9 @@ public class TeacherProfile extends BaseEntity implements Serializable {
     @Column(unique = true)
     String teacherId;
 
+    @Column(unique = true)
+    String username;
+
     LocalDate hireDate;
 
     String department;
@@ -50,8 +53,7 @@ public class TeacherProfile extends BaseEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     Gender gender;
 
-    @Column(unique = true)
     String email;
 
-    String avatar;
+    String avatarPath;
 }
