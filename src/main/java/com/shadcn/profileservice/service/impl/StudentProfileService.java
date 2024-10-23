@@ -39,14 +39,20 @@ public class StudentProfileService implements IStudentProfileService {
     UserProfileMapper userProfileMapper;
     StudentProfileRepository studentProfileRepository;
     AuthorizeUser authorizeUser;
+    UploadService uploadService;
 
     @Override
     @CacheEvict(value = "profiles", allEntries = true)
+    @Transactional
     public void createStudentProfile(StudentProfileCreationRequest request) {
         if (studentProfileRepository.existsByPhoneNumber(request.getPhoneNumber()))
             throw new AppException(ErrorCode.PHONE_EXISTED);
+        System.out.println(request.getPhoneNumber());
+
+        String imageURI = uploadService.uploadImageIfPresent(request.getAvatar());
 
         StudentProfile studentProfile = userProfileMapper.toStudentProfile(request);
+        studentProfile.setAvatarPath(imageURI);
         studentProfile.setStudentId(generateStudentId());
         studentProfileRepository.save(studentProfile);
     }

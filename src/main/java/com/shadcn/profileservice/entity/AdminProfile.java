@@ -54,5 +54,5 @@ public class AdminProfile extends BaseEntity implements Serializable {
 
     String email;
 
-    String avatar;
+    String avatarPath;
 }

@@ -5,10 +5,10 @@ import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.*;
 import com.shadcn.profileservice.entity.*;
 import com.shadcn.profileservice.enums.Gender;
-import com.shadcn.profileservice.validator.DobConstraint;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @Builder
@@ -26,6 +26,5 @@ public class StudentProfileCreationRequest {
 
     @JsonFormat(pattern = "dd-MM-yyyy")
     LocalDate dateOfBirth;
-
-    String avatar;
+    MultipartFile avatar;
 }

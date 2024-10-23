@@ -23,7 +23,7 @@ public class AdminProfileController {
     ITeacherProfileService teacherProfileService;
 
     @PostMapping("/users/admin")
-    ApiResponse<Void> createAdminProfile(@RequestBody AdminProfileCreationRequest request) {
+    ApiResponse<Void> createAdminProfile(@ModelAttribute AdminProfileCreationRequest request) {
         adminProfileService.createAdminProfile(request);
         return ApiResponse.empty();
     }

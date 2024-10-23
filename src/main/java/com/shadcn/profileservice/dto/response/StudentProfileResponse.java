@@ -3,17 +3,14 @@ package com.shadcn.profileservice.dto.response;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.shadcn.profileservice.entity.*;
 import com.shadcn.profileservice.enums.Gender;
 import com.shadcn.profileservice.util.*;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -33,8 +30,10 @@ public class StudentProfileResponse implements Serializable {
 
     String city;
     String phoneNumber;
+
     @Enumerated(EnumType.STRING)
     Gender gender;
+
     String address;
     String grade;
 

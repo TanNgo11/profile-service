@@ -2,8 +2,11 @@ package com.shadcn.profileservice.controller;
 
 import static com.shadcn.profileservice.constant.PathConstant.*;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.shadcn.profileservice.dto.request.*;
 import com.shadcn.profileservice.dto.response.*;
@@ -16,11 +19,12 @@ import lombok.experimental.*;
 @RequiredArgsConstructor
 @RequestMapping(API_V1)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
 public class StudentProfileController {
     IStudentProfileService userProfileService;
 
-    @PostMapping("/users/student")
-    ApiResponse<Void> createStudentProfile(@RequestBody StudentProfileCreationRequest request) {
+    @PostMapping(value = "/users/student")
+    ApiResponse<Void> createStudentProfile(@ModelAttribute StudentProfileCreationRequest request) {
         userProfileService.createStudentProfile(request);
         return ApiResponse.empty();
     }
