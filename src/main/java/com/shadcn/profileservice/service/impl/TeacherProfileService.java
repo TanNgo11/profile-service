@@ -31,15 +31,22 @@ public class TeacherProfileService implements ITeacherProfileService {
     UserProfileMapper userProfileMapper;
     TeacherProfileRepository teacherProfileRepository;
     AuthorizeUser authorizeUser;
+    UploadService uploadService;
 
     //    @CachePut(value = "teacherProfiles", key = "#result.id")
     @CacheEvict(value = "teacherProfiles", allEntries = true)
     @Override
+    @Transactional
     public void createTeacherProfile(TeacherProfileCreationRequest request) {
         if (teacherProfileRepository.existsByPhoneNumber(request.getPhoneNumber()))
             throw new AppException(ErrorCode.PHONE_EXISTED);
 
+
+        String imageURI = uploadService.uploadImageIfPresent(request.getAvatar());
+
+
         TeacherProfile teacherProfile = userProfileMapper.toTeacherProfile(request);
+        teacherProfile.setAvatarPath(imageURI);
         teacherProfile.setTeacherId(generateTeacherId());
         teacherProfile = teacherProfileRepository.save(teacherProfile);
 

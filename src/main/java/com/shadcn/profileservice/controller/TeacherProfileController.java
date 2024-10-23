@@ -21,7 +21,7 @@ public class TeacherProfileController {
 
     @PostMapping("/users/teacher")
     @PreAuthorize("hasRole('TEACHER') or hasRole('ADMIN')")
-    ApiResponse<Void> createTeacherProfile(@RequestBody TeacherProfileCreationRequest request) {
+    ApiResponse<Void> createTeacherProfile(@ModelAttribute TeacherProfileCreationRequest request) {
         userProfileService.createTeacherProfile(request);
         return ApiResponse.empty();
     }
