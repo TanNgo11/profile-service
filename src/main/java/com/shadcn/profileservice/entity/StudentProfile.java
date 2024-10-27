@@ -3,6 +3,7 @@ package com.shadcn.profileservice.entity;
 import java.io.*;
 import java.time.*;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 
@@ -36,9 +37,9 @@ public class StudentProfile extends BaseEntity implements Serializable {
     String address;
 
     @DobConstraint(min = 10, message = "INVALID_DOB")
+    @JsonFormat(pattern = "dd-MM-yyyy")
     LocalDate dateOfBirth;
 
-    @Column(unique = true)
     String phoneNumber;
 
     @Enumerated(EnumType.STRING)

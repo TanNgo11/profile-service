@@ -47,7 +47,7 @@ public class StudentProfileService implements IStudentProfileService {
     public void createStudentProfile(StudentProfileCreationRequest request) {
         if (studentProfileRepository.existsByPhoneNumber(request.getPhoneNumber()))
             throw new AppException(ErrorCode.PHONE_EXISTED);
-        System.out.println(request.getPhoneNumber());
+       
 
         String imageURI = uploadService.uploadImageIfPresent(request.getAvatar());
 
@@ -67,7 +67,6 @@ public class StudentProfileService implements IStudentProfileService {
     }
 
     @Override
-    @Cacheable("studentProfiles")
     public PageResponse<StudentProfileResponse> getAllStudentProfiles(int current, int pageSize) {
         log.info("Fetching all profiles from database for student");
 
