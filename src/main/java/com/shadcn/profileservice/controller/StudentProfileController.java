@@ -21,24 +21,33 @@ import lombok.experimental.*;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 public class StudentProfileController {
-    IStudentProfileService userProfileService;
+    IStudentProfileService studentProfileService;
+   
 
     @PostMapping(value = "/users/student")
     ApiResponse<Void> createStudentProfile(@ModelAttribute StudentProfileCreationRequest request) {
-        userProfileService.createStudentProfile(request);
+        studentProfileService.createStudentProfile(request);
         return ApiResponse.empty();
     }
 
     @GetMapping("/users/student/{username}")
     ApiResponse<StudentProfileResponse> getStudentProfileByUsername(@PathVariable String username) {
-        return ApiResponse.success(userProfileService.getStudentProfileByUsername(username));
+        return ApiResponse.success(studentProfileService.getStudentProfileByUsername(username));
     }
 
     @PutMapping("/users/student/{studentId}")
     @PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
     ApiResponse<Void> updateStudentProfile(
             @PathVariable String studentId, @RequestBody UpdateStudentProfileRequest request) {
-        userProfileService.updateStudentProfile(studentId, request);
+        studentProfileService.updateStudentProfile(studentId, request);
         return ApiResponse.empty();
+    }
+
+    @GetMapping("/users/students")
+    @PreAuthorize("hasRole('ADMIN')")
+    ApiResponse<PageResponse<StudentProfileResponse>> getAllStudentProfiles(
+            @RequestParam(defaultValue = "1", required = false) Integer current,
+            @RequestParam(defaultValue = "10", required = false) Integer pageSize) {
+        return ApiResponse.success(studentProfileService.getAllStudentProfiles(current, pageSize));
     }
 }

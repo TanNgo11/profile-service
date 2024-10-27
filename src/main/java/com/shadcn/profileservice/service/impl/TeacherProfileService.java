@@ -87,7 +87,6 @@ public class TeacherProfileService implements ITeacherProfileService {
     }
 
     @Override
-    @Cacheable("teacherProfiles")
     public PageResponse<TeacherProfileResponse> getAllTeacherProfiles(int current, int pageSize) {
 
         Pageable pageable = PageRequest.of(current - 1, pageSize);
