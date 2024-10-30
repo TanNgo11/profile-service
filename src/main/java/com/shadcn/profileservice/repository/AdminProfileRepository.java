@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.shadcn.profileservice.entity.AdminProfile;
 
 @Repository
-public interface AdminProfileRepository extends JpaRepository<AdminProfile, String> {
+public interface AdminProfileRepository extends JpaRepository<AdminProfile, Long> {
 
     AdminProfile findTopByOrderByIdDesc();
 

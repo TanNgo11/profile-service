@@ -1,6 +1,10 @@
 package com.shadcn.profileservice.service.impl;
 
 import java.time.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import jakarta.transaction.*;
 
@@ -63,6 +67,51 @@ public class AdminProfileService implements IAdminProfileService {
         Page<AdminProfile> profiles = adminProfileRepository.findAll(pageable);
 
         return ConverToPaginationResponse.toPageResponse(profiles, userProfileMapper::toAdminProfileReponse, current);
+    }
+
+    @Override
+    public List<AdminProfileResponse> getAllAdminProfilesByIds(long[] ids) {
+        log.info("Fetching all profiles from database for admin by ids: {}", ids);
+        Set<AdminProfile> adminProfiles = new HashSet<>();
+        List<Long> missingIds = new ArrayList<>();
+
+        for (long id : ids) {
+            adminProfileRepository.findById(id)
+                    .ifPresentOrElse(
+                            adminProfiles::add,
+                            () -> missingIds.add(id)
+                    );
+        }
+        if (!missingIds.isEmpty()) {
+            log.warn("Missing admin profiles with IDs: {}", missingIds);
+        }
+        return adminProfiles.stream()
+                .map(userProfileMapper::toAdminProfileReponse)
+                .toList();
+    }
+
+    @Override
+    public List<AdminProfileResponse> getAllAdminProfilesByUsernames(String[] usernames) {
+        log.info("Fetching all profiles from database for admin by usernames: {}", usernames);
+        Set<AdminProfile> adminProfiles = new HashSet<>();
+        List<String> missingUsernames = new ArrayList<>();
+
+        for (String username : usernames) {
+            adminProfileRepository.findByUsername(username)
+                    .ifPresentOrElse(
+                            adminProfiles::add,
+                            () -> missingUsernames.add(username)
+                    );
+        }
+
+        if (!missingUsernames.isEmpty()) {
+            log.warn("Missing admin profiles with usernames: {}", missingUsernames);
+        }
+
+        return adminProfiles.stream()
+                .map(userProfileMapper::toAdminProfileReponse)
+                .toList();
+
     }
 
     @Override

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.shadcn.profileservice.entity.StudentProfile;
 
 @Repository
-public interface StudentProfileRepository extends JpaRepository<StudentProfile, String> {
+public interface StudentProfileRepository extends JpaRepository<StudentProfile, Long> {
     StudentProfile findTopByOrderByIdDesc();
 
     Optional<StudentProfile> findByStudentId(String userId);

@@ -1,43 +1,49 @@
 package com.shadcn.profileservice.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.shadcn.profileservice.enums.Gender;
+import com.shadcn.profileservice.enums.Present;
+import com.shadcn.profileservice.validator.DobConstraint;
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.Pattern;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.shadcn.profileservice.entity.*;
-import com.shadcn.profileservice.enums.Gender;
-import com.shadcn.profileservice.util.*;
-
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
-@Data
-@Builder
+@Getter
+@Setter
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class StudentProfileResponse implements Serializable {
+public class StudentProfileResponse extends BaseDTOResponse implements Serializable {
     String studentId;
-    String id;
+
+    String username;
+
+    String courseId;
+
     String firstName;
+
     String lastName;
+
+    String address;
 
     @JsonFormat(pattern = "dd-MM-yyyy")
     LocalDate dateOfBirth;
 
-    String city;
     String phoneNumber;
 
     @Enumerated(EnumType.STRING)
     Gender gender;
 
-    String address;
-    String grade;
+    double gpa;
 
-    @JsonFormat(pattern = "dd-MM-yyyy")
     LocalDate enrollmentDate;
 
     String major;
@@ -48,7 +54,8 @@ public class StudentProfileResponse implements Serializable {
 
     String email;
 
-    String avatarPath;
+    String nationality;
+
     // 54 dân tộc :)))
     String nation;
 
@@ -60,5 +67,14 @@ public class StudentProfileResponse implements Serializable {
     // Ex: Đại học chính quy Tiếng Việt K10
     String degreeLevel;
 
+    @Pattern(regexp = "^2\\d{3}-2\\d{3}$", message = "School year must be between 2000-2099")
     String schoolYear;
+
+    @Enumerated(EnumType.STRING)
+    Present present;
+
+    @Column(name = "city")
+    private String city;
+
+    String avatarPath;
 }

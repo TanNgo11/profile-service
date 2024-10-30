@@ -12,6 +12,8 @@ import com.shadcn.profileservice.service.*;
 import lombok.*;
 import lombok.experimental.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(API_V1)
@@ -50,4 +52,16 @@ public class TeacherProfileController {
             @RequestParam(defaultValue = "10", required = false) Integer pageSize) {
         return ApiResponse.success(teacherProfileService.getAllTeacherProfiles(current, pageSize));
     }
+    @GetMapping("/users/teachers/ids")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ApiResponse<List<TeacherProfileResponse>> getAllTeacherProfilesByIds(@RequestParam long[] teacherIds) {
+        return ApiResponse.success(teacherProfileService.getAllTeacherProfilesByIds(teacherIds));
+    }
+
+    @GetMapping("/users/teachers/usernames")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ApiResponse<List<TeacherProfileResponse>> getAllTeacherProfilesByUsernames(@RequestParam String[] usernames) {
+        return ApiResponse.success(teacherProfileService.getAllTeacherProfilesByUsernames(usernames));
+    }
+
 }

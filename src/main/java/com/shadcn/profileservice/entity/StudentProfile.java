@@ -45,7 +45,7 @@ public class StudentProfile extends BaseEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     Gender gender;
 
-    String grade;
+    double gpa;
 
     LocalDate enrollmentDate;
 
@@ -57,7 +57,8 @@ public class StudentProfile extends BaseEntity implements Serializable {
 
     String email;
 
-    String avatarPath;
+    String nationality;
+
     // 54 dân tộc :)))
     String nation;
 
@@ -74,4 +75,10 @@ public class StudentProfile extends BaseEntity implements Serializable {
 
     @Enumerated(EnumType.STRING)
     Present present;
+
+    @Column(name = "city")
+    private String city;
+
+    String avatarPath;
+
 }
