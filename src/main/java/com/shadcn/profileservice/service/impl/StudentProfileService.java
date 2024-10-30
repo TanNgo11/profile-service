@@ -1,17 +1,5 @@
 package com.shadcn.profileservice.service.impl;
 
-import java.time.Year;
-
-import jakarta.transaction.Transactional;
-
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
 import com.shadcn.profileservice.dto.request.StudentProfileCreationRequest;
 import com.shadcn.profileservice.dto.request.UpdateStudentProfileRequest;
 import com.shadcn.profileservice.dto.response.PageResponse;
@@ -24,11 +12,20 @@ import com.shadcn.profileservice.repository.StudentProfileRepository;
 import com.shadcn.profileservice.service.IStudentProfileService;
 import com.shadcn.profileservice.util.ConverToPaginationResponse;
 import com.shadcn.profileservice.validator.AuthorizeUser;
-
+import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import java.time.Year;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -47,7 +44,7 @@ public class StudentProfileService implements IStudentProfileService {
     public void createStudentProfile(StudentProfileCreationRequest request) {
         if (studentProfileRepository.existsByPhoneNumber(request.getPhoneNumber()))
             throw new AppException(ErrorCode.PHONE_EXISTED);
-       
+
 
         String imageURI = uploadService.uploadImageIfPresent(request.getAvatar());
 
@@ -77,6 +74,52 @@ public class StudentProfileService implements IStudentProfileService {
     }
 
     @Override
+    public List<StudentProfileResponse> getAllStudentProfilesByIds(long[] ids) {
+        log.info("Fetching student profiles by IDs: {}", Arrays.toString(ids));
+        Set<StudentProfile> studentProfiles = new HashSet<>();
+        List<Long> missingIds = new ArrayList<>();
+
+        for (long id : ids) {
+            studentProfileRepository.findById(id)
+                    .ifPresentOrElse(
+                            studentProfiles::add,
+                            () -> missingIds.add(id)
+                    );
+        }
+
+        if (!missingIds.isEmpty()) {
+            log.warn("Student profiles not found for IDs: {}", missingIds);
+        }
+
+        return (ArrayList<StudentProfileResponse>) studentProfiles.stream()
+                .map(userProfileMapper::toStudentProfileReponse)
+                .toList();
+    }
+
+
+    @Override
+    public List<StudentProfileResponse> getAllStudentProfilesByUsernames(String[] usernames) {
+        log.info("Fetching student profiles by usernames: {}", Arrays.toString(usernames));
+        Set<StudentProfile> studentProfiles = new HashSet<>();
+        List<String> missingUsernames = new ArrayList<>();
+
+        for (String username : usernames) {
+            studentProfileRepository.findByUsername(username)
+                    .ifPresentOrElse(
+                            studentProfiles::add,
+                            () -> missingUsernames.add(username)
+                    );
+        }
+
+        if (!missingUsernames.isEmpty()) {
+            log.warn("Usernames not found: {}", missingUsernames);
+        }
+        return studentProfiles.stream()
+                .map(userProfileMapper::toStudentProfileReponse)
+                .toList();
+    }
+
+    @Override
     @Transactional
     @CacheEvict(value = "studentProfiles", allEntries = true)
     @CachePut(value = "studentProfiles", key = "#id")
@@ -90,6 +133,7 @@ public class StudentProfileService implements IStudentProfileService {
 
         studentProfileRepository.save(existingProfile);
     }
+
 
     private String generateStudentId() {
         String year = String.valueOf(Year.now().getValue());

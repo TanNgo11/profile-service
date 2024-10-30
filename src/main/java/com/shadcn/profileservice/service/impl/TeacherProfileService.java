@@ -1,26 +1,34 @@
 package com.shadcn.profileservice.service.impl;
 
-import java.time.*;
+import com.shadcn.profileservice.dto.request.TeacherProfileCreationRequest;
+import com.shadcn.profileservice.dto.request.UpdateTeacherProfileRequest;
+import com.shadcn.profileservice.dto.response.PageResponse;
+import com.shadcn.profileservice.dto.response.TeacherProfileResponse;
+import com.shadcn.profileservice.entity.TeacherProfile;
+import com.shadcn.profileservice.exception.AppException;
+import com.shadcn.profileservice.exception.ErrorCode;
+import com.shadcn.profileservice.mapper.UserProfileMapper;
+import com.shadcn.profileservice.repository.TeacherProfileRepository;
+import com.shadcn.profileservice.service.ITeacherProfileService;
+import com.shadcn.profileservice.util.ConverToPaginationResponse;
+import com.shadcn.profileservice.validator.AuthorizeUser;
+import jakarta.transaction.Transactional;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
-import jakarta.transaction.*;
-
-import org.springframework.cache.annotation.*;
-import org.springframework.data.domain.*;
-import org.springframework.stereotype.*;
-
-import com.shadcn.profileservice.dto.request.*;
-import com.shadcn.profileservice.dto.response.*;
-import com.shadcn.profileservice.entity.*;
-import com.shadcn.profileservice.exception.*;
-import com.shadcn.profileservice.mapper.*;
-import com.shadcn.profileservice.repository.*;
-import com.shadcn.profileservice.service.*;
-import com.shadcn.profileservice.util.*;
-import com.shadcn.profileservice.validator.*;
-
-import lombok.*;
-import lombok.experimental.*;
-import lombok.extern.slf4j.*;
+import java.time.Year;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -93,6 +101,48 @@ public class TeacherProfileService implements ITeacherProfileService {
         Page<TeacherProfile> profiles = teacherProfileRepository.findAll(pageable);
 
         return ConverToPaginationResponse.toPageResponse(profiles, userProfileMapper::toTeacherProfileReponse, current);
+    }
+
+    @Override
+    public List<TeacherProfileResponse> getAllTeacherProfilesByIds(long[] ids) {
+        log.info("Fetching teacher profiles by IDs: {}", ids);
+        Set<TeacherProfile> teacherProfiles = new HashSet<>();
+        List<Long> missingIds = new ArrayList<>();
+
+        for (long id : ids) {
+            teacherProfileRepository.findById(id)
+                    .ifPresentOrElse(
+                            teacherProfiles::add,
+                            () -> missingIds.add(id)
+                    );
+        }
+        if (!missingIds.isEmpty()) {
+            log.warn("Teacher profiles not found for IDs: {}", missingIds);
+        }
+        return teacherProfiles.stream()
+                .map(userProfileMapper::toTeacherProfileReponse)
+                .toList();
+    }
+
+    @Override
+    public List<TeacherProfileResponse> getAllTeacherProfilesByUsernames(String[] usernames) {
+        log.info("Fetching teacher profiles by usernames: {}", usernames);
+        Set<TeacherProfile> teacherProfiles = new HashSet<>();
+        List<String> missingUsernames = new ArrayList<>();
+
+        for (String username : usernames) {
+            teacherProfileRepository.findByUsername(username)
+                    .ifPresentOrElse(
+                            teacherProfiles::add,
+                            () -> missingUsernames.add(username)
+                    );
+        }
+        if (!missingUsernames.isEmpty()) {
+            log.warn("Teacher profiles not found for usernames: {}", missingUsernames);
+        }
+        return teacherProfiles.stream()
+                .map(userProfileMapper::toTeacherProfileReponse)
+                .toList();
     }
 
     private String generateTeacherId() {

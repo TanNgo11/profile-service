@@ -24,3 +24,6 @@ spring:
     redis:
       url: redis://:${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}
       timeout: 200000ms
+app:
+  services:
+    file: ${FEIGN_CLIENT_URL}

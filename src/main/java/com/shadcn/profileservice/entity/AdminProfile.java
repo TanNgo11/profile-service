@@ -1,15 +1,13 @@
 package com.shadcn.profileservice.entity;
 
-import java.io.*;
-import java.time.*;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.shadcn.profileservice.enums.Gender;
 import jakarta.persistence.*;
-
-import com.fasterxml.jackson.annotation.*;
-import com.shadcn.profileservice.enums.*;
-
 import lombok.*;
-import lombok.experimental.*;
+import lombok.experimental.FieldDefaults;
+
+import java.io.Serializable;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -43,10 +41,9 @@ public class AdminProfile extends BaseEntity implements Serializable {
     String firstName;
 
     String lastName;
-
+    @JsonFormat(pattern = "dd-MM-yyyy")
     LocalDate dateOfBirth;
 
-    @Column(unique = true)
     String phoneNumber;
 
     @Enumerated(EnumType.STRING)

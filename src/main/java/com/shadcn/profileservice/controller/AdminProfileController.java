@@ -12,6 +12,8 @@ import com.shadcn.profileservice.service.*;
 import lombok.*;
 import lombok.experimental.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(API_V1)
@@ -50,6 +52,19 @@ public class AdminProfileController {
         adminProfileService.updateAdminProfile(profileId, request);
         return ApiResponse.empty();
     }
+
+    @GetMapping("/users/admins/ids")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ApiResponse<List<AdminProfileResponse>> getAllAdminProfilesByIds(@RequestParam long[] adminIds) {
+        return ApiResponse.success(adminProfileService.getAllAdminProfilesByIds(adminIds));
+    }
+
+    @GetMapping("/users/admins/usernames")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ApiResponse<List<AdminProfileResponse>> getAllAdminProfilesByUsernames(@RequestParam String[] usernames) {
+        return ApiResponse.success(adminProfileService.getAllAdminProfilesByUsernames(usernames));
+    }
+
 
 
 }

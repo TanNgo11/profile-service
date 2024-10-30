@@ -6,27 +6,23 @@ import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.shadcn.profileservice.enums.Gender;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
 
-@Data
-@Builder
+@Getter
+@Setter
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class TeacherProfileResponse implements Serializable {
-    String teacherId;
-    String id;
-    String firstName;
-    String lastName;
+public class TeacherProfileResponse extends BaseDTOResponse implements Serializable {
+    String adminId;
 
-    @JsonFormat(pattern = "dd-MM-yyyy")
-    LocalDate dateOfBirth;
-
-    String city;
-    String phoneNumber;
-    Gender gender;
-    String address;
+    String username;
 
     @JsonFormat(pattern = "dd-MM-yyyy")
     LocalDate hireDate;
@@ -35,7 +31,27 @@ public class TeacherProfileResponse implements Serializable {
 
     String major;
 
-    Double salary;
+    String workSchedule;
 
-    String officeHours;
+    String address;
+
+    String emergencyContactName;
+
+    String emergencyContactPhoneNumber;
+
+    String firstName;
+
+    String lastName;
+
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    LocalDate dateOfBirth;
+
+    String phoneNumber;
+
+    @Enumerated(EnumType.STRING)
+    Gender gender;
+
+    String email;
+
+    String avatarPath;
 }
