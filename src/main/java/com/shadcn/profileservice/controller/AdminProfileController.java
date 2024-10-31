@@ -59,11 +59,11 @@ public class AdminProfileController {
         return ApiResponse.success(adminProfileService.getAllAdminProfilesByIds(adminIds));
     }
 
-    @GetMapping("/users/admins/usernames")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ApiResponse<List<AdminProfileResponse>> getAllAdminProfilesByUsernames(@RequestParam String[] usernames) {
-        return ApiResponse.success(adminProfileService.getAllAdminProfilesByUsernames(usernames));
-    }
+//    @GetMapping("/users/admins/usernames")
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public ApiResponse<List<AdminProfileResponse>> getAllAdminProfilesByUsernames(@RequestParam String[] usernames) {
+//        return ApiResponse.success(adminProfileService.getAllAdminProfilesByUsernames(usernames));
+//    }
 
 
 

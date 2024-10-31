@@ -91,7 +91,7 @@ public class StudentProfileService implements IStudentProfileService {
             log.warn("Student profiles not found for IDs: {}", missingIds);
         }
 
-        return (ArrayList<StudentProfileResponse>) studentProfiles.stream()
+        return studentProfiles.stream()
                 .map(userProfileMapper::toStudentProfileReponse)
                 .toList();
     }
