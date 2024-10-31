@@ -58,10 +58,10 @@ public class TeacherProfileController {
         return ApiResponse.success(teacherProfileService.getAllTeacherProfilesByIds(teacherIds));
     }
 
-    @GetMapping("/users/teachers/usernames")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ApiResponse<List<TeacherProfileResponse>> getAllTeacherProfilesByUsernames(@RequestParam String[] usernames) {
-        return ApiResponse.success(teacherProfileService.getAllTeacherProfilesByUsernames(usernames));
-    }
+//    @GetMapping("/users/teachers/usernames")
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public ApiResponse<List<TeacherProfileResponse>> getAllTeacherProfilesByUsernames(@RequestParam String[] usernames) {
+//        return ApiResponse.success(teacherProfileService.getAllTeacherProfilesByUsernames(usernames));
+//    }
 
 }

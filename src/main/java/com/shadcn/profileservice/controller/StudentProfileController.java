@@ -59,10 +59,10 @@ public class StudentProfileController {
         return ApiResponse.success(studentProfileService.getAllStudentProfilesByIds(studentIds));
     }
 
-    @GetMapping("/users/students/usernames")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
-    public ApiResponse<List<StudentProfileResponse>> getAllStudentProfilesByUsernames(@RequestParam String[] usernames) {
-        return ApiResponse.success(studentProfileService.getAllStudentProfilesByUsernames(usernames));
-    }
+//    @GetMapping("/users/students/usernames")
+//    @PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
+//    public ApiResponse<List<StudentProfileResponse>> getAllStudentProfilesByUsernames(@RequestParam String[] usernames) {
+//        return ApiResponse.success(studentProfileService.getAllStudentProfilesByUsernames(usernames));
+//    }
 
 }
