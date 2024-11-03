@@ -50,5 +50,5 @@ public class TeacherProfileCreationRequest {
 
     String email;
 
-    MultipartFile avatar;
+    String avatar;
 }

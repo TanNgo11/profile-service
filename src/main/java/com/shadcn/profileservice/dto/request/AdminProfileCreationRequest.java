@@ -40,7 +40,7 @@ public class AdminProfileCreationRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     LocalDate dateOfBirth;
 
-    MultipartFile avatar;
+    String avatar;
 
     @JsonFormat(pattern = "dd-MM-yyyy")
     LocalDate hireDate;

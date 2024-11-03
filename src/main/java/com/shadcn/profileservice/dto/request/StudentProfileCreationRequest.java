@@ -50,5 +50,5 @@ public class StudentProfileCreationRequest {
 
     String academicYearId;
 
-    MultipartFile avatar;
+    String avatar;
 }
