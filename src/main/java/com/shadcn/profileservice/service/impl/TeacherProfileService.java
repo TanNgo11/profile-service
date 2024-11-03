@@ -1,5 +1,20 @@
 package com.shadcn.profileservice.service.impl;
 
+import java.time.Year;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import jakarta.transaction.Transactional;
+
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
 import com.shadcn.profileservice.dto.request.TeacherProfileCreationRequest;
 import com.shadcn.profileservice.dto.request.UpdateTeacherProfileRequest;
 import com.shadcn.profileservice.dto.response.PageResponse;
@@ -12,23 +27,11 @@ import com.shadcn.profileservice.repository.TeacherProfileRepository;
 import com.shadcn.profileservice.service.ITeacherProfileService;
 import com.shadcn.profileservice.util.ConverToPaginationResponse;
 import com.shadcn.profileservice.validator.AuthorizeUser;
-import jakarta.transaction.Transactional;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
-import java.time.Year;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -49,12 +52,8 @@ public class TeacherProfileService implements ITeacherProfileService {
         if (teacherProfileRepository.existsByPhoneNumber(request.getPhoneNumber()))
             throw new AppException(ErrorCode.PHONE_EXISTED);
 
-
-        String imageURI = uploadService.uploadImageIfPresent(request.getAvatar());
-
-
         TeacherProfile teacherProfile = userProfileMapper.toTeacherProfile(request);
-        teacherProfile.setAvatarPath(imageURI);
+        teacherProfile.setAvatarPath("/file-svc/download/default-avatar");
         teacherProfile.setTeacherId(generateTeacherId());
         teacherProfile = teacherProfileRepository.save(teacherProfile);
 
@@ -110,11 +109,7 @@ public class TeacherProfileService implements ITeacherProfileService {
         List<Long> missingIds = new ArrayList<>();
 
         for (long id : ids) {
-            teacherProfileRepository.findById(id)
-                    .ifPresentOrElse(
-                            teacherProfiles::add,
-                            () -> missingIds.add(id)
-                    );
+            teacherProfileRepository.findById(id).ifPresentOrElse(teacherProfiles::add, () -> missingIds.add(id));
         }
         if (!missingIds.isEmpty()) {
             log.warn("Teacher profiles not found for IDs: {}", missingIds);
@@ -131,11 +126,9 @@ public class TeacherProfileService implements ITeacherProfileService {
         List<String> missingUsernames = new ArrayList<>();
 
         for (String username : usernames) {
-            teacherProfileRepository.findByUsername(username)
-                    .ifPresentOrElse(
-                            teacherProfiles::add,
-                            () -> missingUsernames.add(username)
-                    );
+            teacherProfileRepository
+                    .findByUsername(username)
+                    .ifPresentOrElse(teacherProfiles::add, () -> missingUsernames.add(username));
         }
         if (!missingUsernames.isEmpty()) {
             log.warn("Teacher profiles not found for usernames: {}", missingUsernames);
