@@ -36,15 +36,14 @@ public class AdminProfileService implements IAdminProfileService {
     AdminProfileRepository adminProfileRepository;
     AuthorizeUser authorizeUser;
 
-
     @CacheEvict(value = "adminProfiles", allEntries = true)
     @Override
     @Transactional
     public void createAdminProfile(AdminProfileCreationRequest request) {
         if (adminProfileRepository.existsByPhoneNumber(request.getPhoneNumber()))
             throw new AppException(ErrorCode.PHONE_EXISTED);
-
         AdminProfile adminProfile = userProfileMapper.toAdminProfile(request);
+        adminProfile.setAvatarPath("/file-svc/download/default-avatar");
         adminProfile.setAdminId(generateAdminId());
         adminProfileRepository.save(adminProfile);
     }
@@ -76,11 +75,7 @@ public class AdminProfileService implements IAdminProfileService {
         List<Long> missingIds = new ArrayList<>();
 
         for (long id : ids) {
-            adminProfileRepository.findById(id)
-                    .ifPresentOrElse(
-                            adminProfiles::add,
-                            () -> missingIds.add(id)
-                    );
+            adminProfileRepository.findById(id).ifPresentOrElse(adminProfiles::add, () -> missingIds.add(id));
         }
         if (!missingIds.isEmpty()) {
             log.warn("Missing admin profiles with IDs: {}", missingIds);
@@ -97,11 +92,9 @@ public class AdminProfileService implements IAdminProfileService {
         List<String> missingUsernames = new ArrayList<>();
 
         for (String username : usernames) {
-            adminProfileRepository.findByUsername(username)
-                    .ifPresentOrElse(
-                            adminProfiles::add,
-                            () -> missingUsernames.add(username)
-                    );
+            adminProfileRepository
+                    .findByUsername(username)
+                    .ifPresentOrElse(adminProfiles::add, () -> missingUsernames.add(username));
         }
 
         if (!missingUsernames.isEmpty()) {
@@ -111,7 +104,6 @@ public class AdminProfileService implements IAdminProfileService {
         return adminProfiles.stream()
                 .map(userProfileMapper::toAdminProfileReponse)
                 .toList();
-
     }
 
     @Override
