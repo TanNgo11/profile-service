@@ -6,6 +6,7 @@ import java.util.*;
 import jakarta.persistence.*;
 
 import org.springframework.cglib.core.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.*;
@@ -16,7 +17,6 @@ import com.shadcn.profileservice.validator.DobConstraint;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @Builder
@@ -42,4 +42,14 @@ public class AdminProfileCreationRequest {
 
     MultipartFile avatar;
 
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    LocalDate hireDate;
+
+    String departmentId;
+
+    String workSchedule;
+
+    String emergencyContactName;
+
+    String emergencyContactPhoneNumber;
 }

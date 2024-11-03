@@ -1,13 +1,15 @@
 package com.shadcn.profileservice.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.shadcn.profileservice.enums.Gender;
-import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-
 import java.io.Serializable;
 import java.time.LocalDate;
+
+import jakarta.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.shadcn.profileservice.enums.Gender;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Getter
 @Setter
@@ -24,11 +26,10 @@ public class AdminProfile extends BaseEntity implements Serializable {
     @Column(unique = true)
     String username;
 
+    @JsonFormat(pattern = "dd-MM-yyyy")
     LocalDate hireDate;
 
-    String department;
-
-    String major;
+    String departmentId;
 
     String workSchedule;
 
@@ -41,6 +42,7 @@ public class AdminProfile extends BaseEntity implements Serializable {
     String firstName;
 
     String lastName;
+
     @JsonFormat(pattern = "dd-MM-yyyy")
     LocalDate dateOfBirth;
 
