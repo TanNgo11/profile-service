@@ -27,9 +27,7 @@ public class TeacherProfile extends BaseEntity implements Serializable {
 
     LocalDate hireDate;
 
-    String department;
-
-    String major;
+    String departmentId;
 
     Double salary;
 

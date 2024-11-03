@@ -2,13 +2,13 @@ package com.shadcn.profileservice.dto.request;
 
 import java.time.LocalDate;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.fasterxml.jackson.annotation.*;
 import com.shadcn.profileservice.entity.*;
-import com.shadcn.profileservice.enums.Gender;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @Builder
@@ -16,15 +16,39 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class StudentProfileCreationRequest {
-    String firstName;
-    String lastName;
-    String email;
-    String phoneNumber;
     String username;
-    Gender gender;
+
+    String email;
+
+    String firstName;
+
+    String lastName;
+
     String address;
 
     @JsonFormat(pattern = "dd-MM-yyyy")
     LocalDate dateOfBirth;
+
+    String phoneNumber;
+
+    String gender;
+
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    LocalDate enrollmentDate;
+
+    String departmentId;
+
+    String guardianName;
+
+    String guardianPhoneNumber;
+
+    String nationality;
+
+    String religion;
+
+    String degreeLevel;
+
+    String academicYearId;
+
     MultipartFile avatar;
 }
