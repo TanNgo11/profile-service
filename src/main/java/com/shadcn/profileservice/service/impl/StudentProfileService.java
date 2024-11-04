@@ -1,22 +1,10 @@
 package com.shadcn.profileservice.service.impl;
 
-import com.shadcn.profileservice.dto.request.StudentProfileCreationRequest;
-import com.shadcn.profileservice.dto.request.UpdateStudentProfileRequest;
-import com.shadcn.profileservice.dto.response.PageResponse;
-import com.shadcn.profileservice.dto.response.StudentProfileResponse;
-import com.shadcn.profileservice.entity.StudentProfile;
-import com.shadcn.profileservice.exception.AppException;
-import com.shadcn.profileservice.exception.ErrorCode;
-import com.shadcn.profileservice.mapper.UserProfileMapper;
-import com.shadcn.profileservice.repository.StudentProfileRepository;
-import com.shadcn.profileservice.service.IStudentProfileService;
-import com.shadcn.profileservice.util.ConverToPaginationResponse;
-import com.shadcn.profileservice.validator.AuthorizeUser;
+import java.time.Year;
+import java.util.*;
+
 import jakarta.transaction.Transactional;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.data.domain.Page;
@@ -24,8 +12,24 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.Year;
-import java.util.*;
+import com.shadcn.profileservice.dto.request.StudentProfileCreationRequest;
+import com.shadcn.profileservice.dto.request.UpdateStudentProfileRequest;
+import com.shadcn.profileservice.dto.response.PageResponse;
+import com.shadcn.profileservice.dto.response.StudentProfileResponse;
+import com.shadcn.profileservice.entity.StudentProfile;
+import com.shadcn.profileservice.enums.Present;
+import com.shadcn.profileservice.exception.AppException;
+import com.shadcn.profileservice.exception.ErrorCode;
+import com.shadcn.profileservice.mapper.UserProfileMapper;
+import com.shadcn.profileservice.repository.StudentProfileRepository;
+import com.shadcn.profileservice.service.IStudentProfileService;
+import com.shadcn.profileservice.util.ConverToPaginationResponse;
+import com.shadcn.profileservice.validator.AuthorizeUser;
+
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
@@ -45,12 +49,10 @@ public class StudentProfileService implements IStudentProfileService {
         if (studentProfileRepository.existsByPhoneNumber(request.getPhoneNumber()))
             throw new AppException(ErrorCode.PHONE_EXISTED);
 
-
-        String imageURI = uploadService.uploadImageIfPresent(request.getAvatar());
-
         StudentProfile studentProfile = userProfileMapper.toStudentProfile(request);
-        studentProfile.setAvatarPath(imageURI);
         studentProfile.setStudentId(generateStudentId());
+        studentProfile.setAvatarPath("/file-svc/download/default-avatar");
+        studentProfile.setPresent(Present.STUDYING);
         studentProfileRepository.save(studentProfile);
     }
 
@@ -80,11 +82,7 @@ public class StudentProfileService implements IStudentProfileService {
         List<Long> missingIds = new ArrayList<>();
 
         for (long id : ids) {
-            studentProfileRepository.findById(id)
-                    .ifPresentOrElse(
-                            studentProfiles::add,
-                            () -> missingIds.add(id)
-                    );
+            studentProfileRepository.findById(id).ifPresentOrElse(studentProfiles::add, () -> missingIds.add(id));
         }
 
         if (!missingIds.isEmpty()) {
@@ -96,7 +94,6 @@ public class StudentProfileService implements IStudentProfileService {
                 .toList();
     }
 
-
     @Override
     public List<StudentProfileResponse> getAllStudentProfilesByUsernames(String[] usernames) {
         log.info("Fetching student profiles by usernames: {}", Arrays.toString(usernames));
@@ -104,11 +101,9 @@ public class StudentProfileService implements IStudentProfileService {
         List<String> missingUsernames = new ArrayList<>();
 
         for (String username : usernames) {
-            studentProfileRepository.findByUsername(username)
-                    .ifPresentOrElse(
-                            studentProfiles::add,
-                            () -> missingUsernames.add(username)
-                    );
+            studentProfileRepository
+                    .findByUsername(username)
+                    .ifPresentOrElse(studentProfiles::add, () -> missingUsernames.add(username));
         }
 
         if (!missingUsernames.isEmpty()) {
@@ -133,7 +128,6 @@ public class StudentProfileService implements IStudentProfileService {
 
         studentProfileRepository.save(existingProfile);
     }
-
 
     private String generateStudentId() {
         String year = String.valueOf(Year.now().getValue());
