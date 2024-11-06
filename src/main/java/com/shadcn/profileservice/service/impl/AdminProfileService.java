@@ -58,7 +58,7 @@ public class AdminProfileService implements IAdminProfileService {
     }
 
     @Override
-    @Cacheable("adminProfiles")
+//    @Cacheable("adminProfiles")
     public PageResponse<AdminProfileResponse> getAllAdminProfiles(int current, int pageSize) {
         log.info("Fetching all profiles from database for admin");
 

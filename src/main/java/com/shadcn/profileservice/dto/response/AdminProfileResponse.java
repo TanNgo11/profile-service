@@ -1,18 +1,17 @@
 package com.shadcn.profileservice.dto.response;
 
-import java.io.*;
-import java.time.*;
+import java.io.Serializable;
+import java.time.LocalDate;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.*;
-import com.fasterxml.jackson.datatype.jsr310.ser.*;
-import com.shadcn.profileservice.enums.*;
-
-import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.shadcn.profileservice.enums.Gender;
+
 import lombok.*;
-import lombok.experimental.*;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
@@ -21,16 +20,14 @@ import lombok.experimental.*;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AdminProfileResponse extends BaseDTOResponse implements Serializable {
-
     String adminId;
 
     String username;
 
+    @JsonFormat(pattern = "dd-MM-yyyy")
     LocalDate hireDate;
 
-    String department;
-
-    String major;
+    String departmentId;
 
     String workSchedule;
 
@@ -43,6 +40,7 @@ public class AdminProfileResponse extends BaseDTOResponse implements Serializabl
     String firstName;
 
     String lastName;
+
     @JsonFormat(pattern = "dd-MM-yyyy")
     LocalDate dateOfBirth;
 

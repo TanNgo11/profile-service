@@ -43,6 +43,7 @@ public class StudentProfile extends BaseEntity implements Serializable {
 
     double gpa;
 
+    @JsonFormat(pattern = "dd-MM-yyyy")
     LocalDate enrollmentDate;
 
     // major-faculty => department
