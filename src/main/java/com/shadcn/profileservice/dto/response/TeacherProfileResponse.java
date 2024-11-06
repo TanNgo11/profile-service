@@ -3,12 +3,12 @@ package com.shadcn.profileservice.dto.response;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.shadcn.profileservice.enums.Gender;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
@@ -20,18 +20,18 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TeacherProfileResponse extends BaseDTOResponse implements Serializable {
-    String adminId;
+    String teacherId;
 
     String username;
 
     @JsonFormat(pattern = "dd-MM-yyyy")
     LocalDate hireDate;
 
-    String department;
+    String departmentId;
 
-    String major;
+    Double salary;
 
-    String workSchedule;
+    String officeHours;
 
     String address;
 

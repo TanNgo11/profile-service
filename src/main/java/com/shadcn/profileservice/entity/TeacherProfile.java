@@ -5,6 +5,7 @@ import java.time.*;
 
 import jakarta.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.shadcn.profileservice.enums.*;
 
 import lombok.*;
@@ -25,6 +26,7 @@ public class TeacherProfile extends BaseEntity implements Serializable {
     @Column(unique = true)
     String username;
 
+    @JsonFormat(pattern = "dd-MM-yyyy")
     LocalDate hireDate;
 
     String departmentId;
@@ -43,6 +45,7 @@ public class TeacherProfile extends BaseEntity implements Serializable {
 
     String lastName;
 
+    @JsonFormat(pattern = "dd-MM-yyyy")
     LocalDate dateOfBirth;
 
     String phoneNumber;
