@@ -2,6 +2,8 @@ package com.shadcn.profileservice.controller;
 
 import static com.shadcn.profileservice.constant.PathConstant.*;
 
+import java.util.List;
+
 import org.springframework.security.access.prepost.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,8 +13,6 @@ import com.shadcn.profileservice.service.*;
 
 import lombok.*;
 import lombok.experimental.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -45,6 +45,7 @@ public class TeacherProfileController {
         teacherProfileService.updateTeacherProfile(profileId, request);
         return ApiResponse.empty();
     }
+
     @GetMapping("/users/teachers")
     @PreAuthorize("hasRole('ADMIN')")
     ApiResponse<PageResponse<TeacherProfileResponse>> getAllTeacherProfiles(
@@ -52,16 +53,18 @@ public class TeacherProfileController {
             @RequestParam(defaultValue = "10", required = false) Integer pageSize) {
         return ApiResponse.success(teacherProfileService.getAllTeacherProfiles(current, pageSize));
     }
+
     @GetMapping("/users/teachers/ids")
     @PreAuthorize("hasRole('ADMIN')")
     public ApiResponse<List<TeacherProfileResponse>> getAllTeacherProfilesByIds(@RequestParam long[] teacherIds) {
         return ApiResponse.success(teacherProfileService.getAllTeacherProfilesByIds(teacherIds));
     }
 
-//    @GetMapping("/users/teachers/usernames")
-//    @PreAuthorize("hasRole('ADMIN')")
-//    public ApiResponse<List<TeacherProfileResponse>> getAllTeacherProfilesByUsernames(@RequestParam String[] usernames) {
-//        return ApiResponse.success(teacherProfileService.getAllTeacherProfilesByUsernames(usernames));
-//    }
+    //    @GetMapping("/users/teachers/usernames")
+    //    @PreAuthorize("hasRole('ADMIN')")
+    //    public ApiResponse<List<TeacherProfileResponse>> getAllTeacherProfilesByUsernames(@RequestParam String[]
+    // usernames) {
+    //        return ApiResponse.success(teacherProfileService.getAllTeacherProfilesByUsernames(usernames));
+    //    }
 
 }

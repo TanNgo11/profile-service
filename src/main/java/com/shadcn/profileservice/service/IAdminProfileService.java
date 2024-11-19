@@ -1,9 +1,9 @@
 package com.shadcn.profileservice.service;
 
+import java.util.List;
+
 import com.shadcn.profileservice.dto.request.*;
 import com.shadcn.profileservice.dto.response.*;
-
-import java.util.List;
 
 public interface IAdminProfileService {
 
