@@ -1,21 +1,23 @@
 package com.shadcn.profileservice.controller;
 
+import static com.shadcn.profileservice.constant.PathConstant.API_V1;
+
+import java.util.List;
+
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
 import com.shadcn.profileservice.dto.request.StudentProfileCreationRequest;
 import com.shadcn.profileservice.dto.request.UpdateStudentProfileRequest;
 import com.shadcn.profileservice.dto.response.ApiResponse;
 import com.shadcn.profileservice.dto.response.PageResponse;
 import com.shadcn.profileservice.dto.response.StudentProfileResponse;
 import com.shadcn.profileservice.service.IStudentProfileService;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
-import static com.shadcn.profileservice.constant.PathConstant.API_V1;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,7 +26,6 @@ import static com.shadcn.profileservice.constant.PathConstant.API_V1;
 @Slf4j
 public class StudentProfileController {
     IStudentProfileService studentProfileService;
-
 
     @PostMapping(value = "/users/student")
     ApiResponse<Void> createStudentProfile(@ModelAttribute StudentProfileCreationRequest request) {
@@ -59,10 +60,17 @@ public class StudentProfileController {
         return ApiResponse.success(studentProfileService.getAllStudentProfilesByIds(studentIds));
     }
 
-//    @GetMapping("/users/students/usernames")
-//    @PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
-//    public ApiResponse<List<StudentProfileResponse>> getAllStudentProfilesByUsernames(@RequestParam String[] usernames) {
-//        return ApiResponse.success(studentProfileService.getAllStudentProfilesByUsernames(usernames));
-//    }
+    @GetMapping("/users/students/{studentId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
+    public ApiResponse<StudentProfileResponse> getAllStudentProfilesById(@PathVariable Long studentId) {
+        return ApiResponse.success(studentProfileService.getStudentProfileById(studentId));
+    }
+
+    //    @GetMapping("/users/students/usernames")
+    //    @PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
+    //    public ApiResponse<List<StudentProfileResponse>> getAllStudentProfilesByUsernames(@RequestParam String[]
+    // usernames) {
+    //        return ApiResponse.success(studentProfileService.getAllStudentProfilesByUsernames(usernames));
+    //    }
 
 }

@@ -95,6 +95,11 @@ public class StudentProfileService implements IStudentProfileService {
     }
 
     @Override
+    public StudentProfileResponse getStudentProfileById(Long id) {
+        return null;
+    }
+
+    @Override
     public List<StudentProfileResponse> getAllStudentProfilesByUsernames(String[] usernames) {
         log.info("Fetching student profiles by usernames: {}", Arrays.toString(usernames));
         Set<StudentProfile> studentProfiles = new HashSet<>();

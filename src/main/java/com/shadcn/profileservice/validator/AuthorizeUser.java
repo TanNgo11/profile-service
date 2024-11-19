@@ -17,7 +17,7 @@ import lombok.extern.slf4j.*;
 @Component
 public class AuthorizeUser {
     IAuthenticationFacade authenticationFacade;
-    //GetUsername by Authentication
+    // GetUsername by Authentication
     public void checkAuthorizeUser() {
         Authentication myAuthentication = authenticationFacade.getAuthentication();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

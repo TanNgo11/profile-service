@@ -2,6 +2,8 @@ package com.shadcn.profileservice.controller;
 
 import static com.shadcn.profileservice.constant.PathConstant.*;
 
+import java.util.List;
+
 import org.springframework.security.access.prepost.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,8 +13,6 @@ import com.shadcn.profileservice.service.*;
 
 import lombok.*;
 import lombok.experimental.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,8 +33,8 @@ public class AdminProfileController {
 
     @GetMapping("/users/admin/{username}")
     @PreAuthorize("hasRole('ADMIN')")
-    AdminProfileResponse getAdminProfileByUsername(@PathVariable String username) {
-        return adminProfileService.getAdminProfileByUsername(username);
+    ApiResponse<AdminProfileResponse> getAdminProfileByUsername(@PathVariable String username) {
+        return ApiResponse.success(adminProfileService.getAdminProfileByUsername(username));
     }
 
     @GetMapping("/users/admin")
@@ -59,12 +59,11 @@ public class AdminProfileController {
         return ApiResponse.success(adminProfileService.getAllAdminProfilesByIds(adminIds));
     }
 
-//    @GetMapping("/users/admins/usernames")
-//    @PreAuthorize("hasRole('ADMIN')")
-//    public ApiResponse<List<AdminProfileResponse>> getAllAdminProfilesByUsernames(@RequestParam String[] usernames) {
-//        return ApiResponse.success(adminProfileService.getAllAdminProfilesByUsernames(usernames));
-//    }
-
-
+    //    @GetMapping("/users/admins/usernames")
+    //    @PreAuthorize("hasRole('ADMIN')")
+    //    public ApiResponse<List<AdminProfileResponse>> getAllAdminProfilesByUsernames(@RequestParam String[]
+    // usernames) {
+    //        return ApiResponse.success(adminProfileService.getAllAdminProfilesByUsernames(usernames));
+    //    }
 
 }
