@@ -11,7 +11,6 @@ import com.shadcn.profileservice.entity.StudentProfile;
 public interface StudentProfileRepository extends JpaRepository<StudentProfile, Long> {
     StudentProfile findTopByOrderByIdDesc();
 
-    Optional<StudentProfile> findByStudentId(String userId);
 
     Optional<StudentProfile> findByUsername(String username);
 

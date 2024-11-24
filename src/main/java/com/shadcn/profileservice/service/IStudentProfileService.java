@@ -8,7 +8,7 @@ import com.shadcn.profileservice.dto.response.*;
 public interface IStudentProfileService {
     void createStudentProfile(StudentProfileCreationRequest request);
 
-    void updateStudentProfile(String id, UpdateStudentProfileRequest request);
+    void updateStudentProfile(Long id, UpdateStudentProfileRequest request);
 
     StudentProfileResponse getStudentProfileByUsername(String username);
 
