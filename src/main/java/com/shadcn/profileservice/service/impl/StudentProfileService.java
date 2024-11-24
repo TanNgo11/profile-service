@@ -96,7 +96,11 @@ public class StudentProfileService implements IStudentProfileService {
 
     @Override
     public StudentProfileResponse getStudentProfileById(Long id) {
-        return null;
+        StudentProfile studentProfile = studentProfileRepository
+                .findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.STUDENT_NOT_EXISTED));
+
+        return userProfileMapper.toStudentProfileReponse(studentProfile);
     }
 
     @Override
@@ -123,9 +127,9 @@ public class StudentProfileService implements IStudentProfileService {
     @Transactional
     @CacheEvict(value = "studentProfiles", allEntries = true)
     @CachePut(value = "studentProfiles", key = "#id")
-    public void updateStudentProfile(String id, UpdateStudentProfileRequest request) {
+    public void updateStudentProfile(Long id, UpdateStudentProfileRequest request) {
         StudentProfile existingProfile = studentProfileRepository
-                .findByStudentId(id)
+                .findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.STUDENT_NOT_EXISTED));
         authorizeUser.checkAuthorizeUser();
 

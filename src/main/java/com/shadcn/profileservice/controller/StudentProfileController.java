@@ -41,7 +41,7 @@ public class StudentProfileController {
     @PutMapping("/users/student/{studentId}")
     @PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
     ApiResponse<Void> updateStudentProfile(
-            @PathVariable String studentId, @RequestBody UpdateStudentProfileRequest request) {
+            @PathVariable Long studentId, @RequestBody UpdateStudentProfileRequest request) {
         studentProfileService.updateStudentProfile(studentId, request);
         return ApiResponse.empty();
     }
@@ -62,7 +62,7 @@ public class StudentProfileController {
 
     @GetMapping("/users/students/{studentId}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
-    public ApiResponse<StudentProfileResponse> getAllStudentProfilesById(@PathVariable Long studentId) {
+    public ApiResponse<StudentProfileResponse> getStudentProfileById(@PathVariable Long studentId) {
         return ApiResponse.success(studentProfileService.getStudentProfileById(studentId));
     }
 
