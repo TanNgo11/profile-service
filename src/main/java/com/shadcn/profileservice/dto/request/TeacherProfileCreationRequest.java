@@ -2,8 +2,6 @@ package com.shadcn.profileservice.dto.request;
 
 import java.time.LocalDate;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import com.fasterxml.jackson.annotation.*;
 import com.shadcn.profileservice.entity.*;
 import com.shadcn.profileservice.enums.Gender;
@@ -38,6 +36,8 @@ public class TeacherProfileCreationRequest {
 
     String firstName;
 
+    String middleName;
+
     String lastName;
 
     @DobConstraint(min = 18, message = "INVALID_DOB")
@@ -51,4 +51,6 @@ public class TeacherProfileCreationRequest {
     String email;
 
     String avatar;
+
+    String citizenId;
 }
