@@ -47,7 +47,7 @@ public class StudentProfile extends BaseEntity implements Serializable {
     LocalDate enrollmentDate;
 
     // major-faculty => department
-    String departmentId;
+    Long departmentId;
 
     String guardianName;
 

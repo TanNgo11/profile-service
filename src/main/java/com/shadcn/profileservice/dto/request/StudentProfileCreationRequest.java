@@ -2,8 +2,6 @@ package com.shadcn.profileservice.dto.request;
 
 import java.time.LocalDate;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import com.fasterxml.jackson.annotation.*;
 import com.shadcn.profileservice.entity.*;
 
@@ -22,6 +20,8 @@ public class StudentProfileCreationRequest {
 
     String firstName;
 
+    String middleName;
+
     String lastName;
 
     String address;
@@ -36,7 +36,7 @@ public class StudentProfileCreationRequest {
     @JsonFormat(pattern = "dd-MM-yyyy")
     LocalDate enrollmentDate;
 
-    String departmentId;
+    Long departmentId;
 
     String guardianName;
 
@@ -51,4 +51,6 @@ public class StudentProfileCreationRequest {
     String academicYearId;
 
     String avatar;
+
+    String citizenId;
 }

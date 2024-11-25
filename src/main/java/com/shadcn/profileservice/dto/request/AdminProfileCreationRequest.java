@@ -6,7 +6,6 @@ import java.util.*;
 import jakarta.persistence.*;
 
 import org.springframework.cglib.core.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.*;
