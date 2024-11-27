@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.shadcn.profileservice.dto.request.*;
 import com.shadcn.profileservice.dto.response.*;
+import com.shadcn.profileservice.entity.AdminProfile;
 
 public interface IAdminProfileService {
 
@@ -18,4 +19,6 @@ public interface IAdminProfileService {
     List<AdminProfileResponse> getAllAdminProfilesByUsernames(String[] usernames);
 
     void updateAdminProfile(String id, UpdateAdminProfileRequest request);
+
+    List<AdminProfileResponse> filterAdmins(AdminFilterRequest filterRequest);
 }
