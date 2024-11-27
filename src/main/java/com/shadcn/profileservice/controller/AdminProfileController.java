@@ -2,13 +2,17 @@ package com.shadcn.profileservice.controller;
 
 import static com.shadcn.profileservice.constant.PathConstant.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import com.shadcn.profileservice.enums.Gender;
 import org.springframework.security.access.prepost.*;
 import org.springframework.web.bind.annotation.*;
 
 import com.shadcn.profileservice.dto.request.*;
 import com.shadcn.profileservice.dto.response.*;
+import com.shadcn.profileservice.entity.AdminProfile;
 import com.shadcn.profileservice.service.*;
 
 import lombok.*;
@@ -66,4 +70,37 @@ public class AdminProfileController {
     //        return ApiResponse.success(adminProfileService.getAllAdminProfilesByUsernames(usernames));
     //    }
 
+    @GetMapping("/filter")
+    public ApiResponse<List<AdminProfileResponse>> filterAdmins(
+            @RequestParam(required = false) String firstName,
+            @RequestParam(required = false) String lastName,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String phoneNumber,
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) Gender gender,
+            @RequestParam(required = false) String address,
+            @RequestParam(required = false) String hireDate,
+            @RequestParam(required = false) String departmentId,
+            @RequestParam(required = false) String workSchedule,
+            @RequestParam(required = false) String emergencyContactName,
+            @RequestParam(required = false) String emergencyContactPhoneNumber
+    ) {
+        // Chuyển đổi các tham số thành AdminFilterRequest
+        AdminFilterRequest filterRequest = AdminFilterRequest.builder()
+                .firstName(firstName)
+                .lastName(lastName)
+                .email(email)
+                .phoneNumber(phoneNumber)
+                .username(username)
+                .gender(gender)
+                .address(address)
+                .hireDate(hireDate != null ? LocalDate.parse(hireDate, DateTimeFormatter.ofPattern("dd-MM-yyyy")) : null)
+                .departmentId(departmentId)
+                .workSchedule(workSchedule)
+                .emergencyContactName(emergencyContactName)
+                .emergencyContactPhoneNumber(emergencyContactPhoneNumber)
+                .build();
+
+        return ApiResponse.success(adminProfileService.filterAdmins(filterRequest));
+    }
 }
