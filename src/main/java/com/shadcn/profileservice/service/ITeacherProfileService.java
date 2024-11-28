@@ -19,5 +19,5 @@ public interface ITeacherProfileService {
 
     List<TeacherProfileResponse> getAllTeacherProfilesByUsernames(String[] usernames);
 
-    PageResponse<TeacherProfileResponse> getAllTeacherProfiles(int current, int pageSize);
+    PageResponse<TeacherProfileResponse> getAllTeacherProfiles(TeacherFilterRequest filterRequest, int current, int pageSize);
 }

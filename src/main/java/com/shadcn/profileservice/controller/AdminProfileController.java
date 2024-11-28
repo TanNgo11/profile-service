@@ -44,9 +44,39 @@ public class AdminProfileController {
     @GetMapping("/users/admin")
     @PreAuthorize("hasRole('ADMIN')")
     ApiResponse<PageResponse<AdminProfileResponse>> getAllAdminProfiles(
+            @RequestParam(required = false) String firstName,
+            @RequestParam(required = false) String lastName,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String phoneNumber,
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) Gender gender,
+            @RequestParam(required = false) String address,
+            @RequestParam(required = false) String hireDate,
+            @RequestParam(required = false) String departmentId,
+            @RequestParam(required = false) String workSchedule,
+            @RequestParam(required = false) String emergencyContactName,
+            @RequestParam(required = false) String emergencyContactPhoneNumber,
+            @RequestParam(required = false) String sortBy,
+            @RequestParam(required = false) String sortDirection,
             @RequestParam(defaultValue = "1", required = false) Integer current,
             @RequestParam(defaultValue = "10", required = false) Integer pageSize) {
-        return ApiResponse.success(adminProfileService.getAllAdminProfiles(current, pageSize));
+        AdminFilterRequest filterRequest = AdminFilterRequest.builder()
+                .firstName(firstName)
+                .lastName(lastName)
+                .email(email)
+                .phoneNumber(phoneNumber)
+                .username(username)
+                .gender(gender)
+                .address(address)
+                .hireDate(hireDate != null ? LocalDate.parse(hireDate, DateTimeFormatter.ofPattern("dd-MM-yyyy")) : null)
+                .departmentId(departmentId)
+                .workSchedule(workSchedule)
+                .emergencyContactName(emergencyContactName)
+                .emergencyContactPhoneNumber(emergencyContactPhoneNumber)
+                .sortBy(sortBy)
+                .sortDirection(sortDirection)
+                .build();
+        return ApiResponse.success(adminProfileService.getAllAdminProfiles(filterRequest, current, pageSize));
     }
 
     @PutMapping("/users/admin/{profileId}")
@@ -61,46 +91,5 @@ public class AdminProfileController {
     @PreAuthorize("hasRole('ADMIN')")
     public ApiResponse<List<AdminProfileResponse>> getAllAdminProfilesByIds(@RequestParam long[] adminIds) {
         return ApiResponse.success(adminProfileService.getAllAdminProfilesByIds(adminIds));
-    }
-
-    //    @GetMapping("/users/admins/usernames")
-    //    @PreAuthorize("hasRole('ADMIN')")
-    //    public ApiResponse<List<AdminProfileResponse>> getAllAdminProfilesByUsernames(@RequestParam String[]
-    // usernames) {
-    //        return ApiResponse.success(adminProfileService.getAllAdminProfilesByUsernames(usernames));
-    //    }
-
-    @GetMapping("/filter")
-    public ApiResponse<List<AdminProfileResponse>> filterAdmins(
-            @RequestParam(required = false) String firstName,
-            @RequestParam(required = false) String lastName,
-            @RequestParam(required = false) String email,
-            @RequestParam(required = false) String phoneNumber,
-            @RequestParam(required = false) String username,
-            @RequestParam(required = false) Gender gender,
-            @RequestParam(required = false) String address,
-            @RequestParam(required = false) String hireDate,
-            @RequestParam(required = false) String departmentId,
-            @RequestParam(required = false) String workSchedule,
-            @RequestParam(required = false) String emergencyContactName,
-            @RequestParam(required = false) String emergencyContactPhoneNumber
-    ) {
-        // Chuyển đổi các tham số thành AdminFilterRequest
-        AdminFilterRequest filterRequest = AdminFilterRequest.builder()
-                .firstName(firstName)
-                .lastName(lastName)
-                .email(email)
-                .phoneNumber(phoneNumber)
-                .username(username)
-                .gender(gender)
-                .address(address)
-                .hireDate(hireDate != null ? LocalDate.parse(hireDate, DateTimeFormatter.ofPattern("dd-MM-yyyy")) : null)
-                .departmentId(departmentId)
-                .workSchedule(workSchedule)
-                .emergencyContactName(emergencyContactName)
-                .emergencyContactPhoneNumber(emergencyContactPhoneNumber)
-                .build();
-
-        return ApiResponse.success(adminProfileService.filterAdmins(filterRequest));
     }
 }

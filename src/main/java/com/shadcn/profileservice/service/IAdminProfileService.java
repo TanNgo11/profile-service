@@ -12,7 +12,7 @@ public interface IAdminProfileService {
 
     AdminProfileResponse getAdminProfileByUsername(String username);
 
-    PageResponse<AdminProfileResponse> getAllAdminProfiles(int current, int pageSize);
+    PageResponse<AdminProfileResponse> getAllAdminProfiles(AdminFilterRequest filterRequest, int current, int pageSize);
 
     List<AdminProfileResponse> getAllAdminProfilesByIds(long[] ids);
 
@@ -20,5 +20,4 @@ public interface IAdminProfileService {
 
     void updateAdminProfile(String id, UpdateAdminProfileRequest request);
 
-    List<AdminProfileResponse> filterAdmins(AdminFilterRequest filterRequest);
 }
