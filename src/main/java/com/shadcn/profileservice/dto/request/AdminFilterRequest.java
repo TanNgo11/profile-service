@@ -35,4 +35,6 @@ public class AdminFilterRequest {
     String workSchedule;
     String emergencyContactName;
     String emergencyContactPhoneNumber;
+    String sortDirection;
+    String sortBy;
 }

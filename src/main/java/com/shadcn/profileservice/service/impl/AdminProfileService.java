@@ -1,11 +1,10 @@
 package com.shadcn.profileservice.service.impl;
 
 import java.time.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.jpa.JPQLQuery;
 import jakarta.transaction.*;
 
 import org.springframework.cache.annotation.*;
@@ -16,11 +15,10 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.shadcn.profileservice.dto.request.*;
 import com.shadcn.profileservice.dto.response.*;
-import com.shadcn.profileservice.entity.AdminProfile;
-import com.shadcn.profileservice.entity.QAdminProfile;
+import com.shadcn.profileservice.entity.*;
 import com.shadcn.profileservice.exception.*;
 import com.shadcn.profileservice.mapper.*;
-import com.shadcn.profileservice.repository.AdminProfileRepository;
+import com.shadcn.profileservice.repository.*;
 import com.shadcn.profileservice.service.*;
 import com.shadcn.profileservice.util.*;
 import com.shadcn.profileservice.validator.*;
@@ -62,15 +60,120 @@ public class AdminProfileService implements IAdminProfileService {
     }
 
     @Override
-    //    @Cacheable("adminProfiles")
-    public PageResponse<AdminProfileResponse> getAllAdminProfiles(int current, int pageSize) {
-        log.info("Fetching all profiles from database for admin");
+    public PageResponse<AdminProfileResponse> getAllAdminProfiles(AdminFilterRequest filterRequest, int current, int pageSize) {
+        QAdminProfile admin = QAdminProfile.adminProfile;
+
+        BooleanBuilder builder = buildFilterConditions(filterRequest, admin);
+
+        OrderSpecifier<?> orderSpecifier = getOrderSpecifier(filterRequest, admin);
 
         Pageable pageable = PageRequest.of(current - 1, pageSize);
-        Page<AdminProfile> profiles = adminProfileRepository.findAll(pageable);
 
-        return ConverToPaginationResponse.toPageResponse(profiles, userProfileMapper::toAdminProfileReponse, current);
+        JPQLQuery<AdminProfile> query = queryFactory.selectFrom(admin).where(builder).orderBy(orderSpecifier);
+        long total = query.fetchCount();
+        List<AdminProfile> adminProfiles = query.offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
+
+        return ConverToPaginationResponse.toPageResponse(
+                new PageImpl<>(adminProfiles, pageable, total),
+                userProfileMapper::toAdminProfileReponse,
+                current
+        );
     }
+    private BooleanBuilder buildFilterConditions(AdminFilterRequest filterRequest, QAdminProfile admin) {
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if (filterRequest.getFirstName() != null) {
+            builder.and(admin.firstName.containsIgnoreCase(filterRequest.getFirstName()));
+        }
+        if (filterRequest.getLastName() != null) {
+            builder.and(admin.lastName.containsIgnoreCase(filterRequest.getLastName()));
+        }
+        if (filterRequest.getEmail() != null) {
+            builder.and(admin.email.containsIgnoreCase(filterRequest.getEmail()));
+        }
+        if (filterRequest.getPhoneNumber() != null) {
+            builder.and(admin.phoneNumber.eq(filterRequest.getPhoneNumber()));
+        }
+        if (filterRequest.getUsername() != null) {
+            builder.and(admin.username.containsIgnoreCase(filterRequest.getUsername()));
+        }
+        if (filterRequest.getGender() != null) {
+            builder.and(admin.gender.eq(filterRequest.getGender()));
+        }
+        if (filterRequest.getAddress() != null) {
+            builder.and(admin.address.containsIgnoreCase(filterRequest.getAddress()));
+        }
+        if (filterRequest.getHireDate() != null) {
+            builder.and(admin.hireDate.eq(filterRequest.getHireDate()));
+        }
+        if (filterRequest.getDepartmentId() != null) {
+            builder.and(admin.departmentId.eq(filterRequest.getDepartmentId()));
+        }
+        if (filterRequest.getWorkSchedule() != null) {
+            builder.and(admin.workSchedule.containsIgnoreCase(filterRequest.getWorkSchedule()));
+        }
+        if (filterRequest.getEmergencyContactName() != null) {
+            builder.and(admin.emergencyContactName.containsIgnoreCase(filterRequest.getEmergencyContactName()));
+        }
+        if (filterRequest.getEmergencyContactPhoneNumber() != null) {
+            builder.and(admin.emergencyContactPhoneNumber.eq(filterRequest.getEmergencyContactPhoneNumber()));
+        }
+
+        return builder;
+    }
+
+    private OrderSpecifier<?> getOrderSpecifier(AdminFilterRequest filterRequest, QAdminProfile admin) {
+        String sortBy = filterRequest.getSortBy() != null ? filterRequest.getSortBy() : "id";
+        boolean isAscending = filterRequest.getSortDirection() == null || "asc".equalsIgnoreCase(filterRequest.getSortDirection());
+        OrderSpecifier<?> orderSpecifier;
+
+        switch (sortBy) {
+            case "id":
+                orderSpecifier = isAscending ? admin.id.asc() : admin.id.desc();
+                break;
+            case "firstName":
+                orderSpecifier = isAscending ? admin.firstName.asc() : admin.firstName.desc();
+                break;
+            case "lastName":
+                orderSpecifier = isAscending ? admin.lastName.asc() : admin.lastName.desc();
+                break;
+            case "email":
+                orderSpecifier = isAscending ? admin.email.asc() : admin.email.desc();
+                break;
+            case "phoneNumber":
+                orderSpecifier = isAscending ? admin.phoneNumber.asc() : admin.phoneNumber.desc();
+                break;
+            case "username":
+                orderSpecifier = isAscending ? admin.username.asc() : admin.username.desc();
+                break;
+            case "gender":
+                orderSpecifier = isAscending ? admin.gender.asc() : admin.gender.desc();
+                break;
+            case "address":
+                orderSpecifier = isAscending ? admin.address.asc() : admin.address.desc();
+                break;
+            case "hireDate":
+                orderSpecifier = isAscending ? admin.hireDate.asc() : admin.hireDate.desc();
+                break;
+            case "departmentId":
+                orderSpecifier = isAscending ? admin.departmentId.asc() : admin.departmentId.desc();
+                break;
+            case "workSchedule":
+                orderSpecifier = isAscending ? admin.workSchedule.asc() : admin.workSchedule.desc();
+                break;
+            case "emergencyContactName":
+                orderSpecifier = isAscending ? admin.emergencyContactName.asc() : admin.emergencyContactName.desc();
+                break;
+            case "emergencyContactPhoneNumber":
+                orderSpecifier = isAscending ? admin.emergencyContactPhoneNumber.asc() : admin.emergencyContactPhoneNumber.desc();
+                break;
+            default:
+                orderSpecifier = admin.id.asc();
+        }
+
+        return orderSpecifier;
+    }
+
 
     @Override
     public List<AdminProfileResponse> getAllAdminProfilesByIds(long[] ids) {
@@ -122,54 +225,6 @@ public class AdminProfileService implements IAdminProfileService {
         authorizeUser.checkAuthorizeUser();
         userProfileMapper.updateAdminProfileFromRequest(request, existingProfile);
         adminProfileRepository.save(existingProfile);
-    }
-
-    @Override
-    public List<AdminProfileResponse> filterAdmins(AdminFilterRequest filterRequest) {
-        QAdminProfile admin = QAdminProfile.adminProfile; // Generated by QueryDSL
-        BooleanBuilder builder = new BooleanBuilder();
-
-        if (filterRequest.getFirstName() != null) {
-            builder.and(admin.firstName.containsIgnoreCase(filterRequest.getFirstName()));
-        }
-        if (filterRequest.getLastName() != null) {
-            builder.and(admin.lastName.containsIgnoreCase(filterRequest.getLastName()));
-        }
-        if (filterRequest.getEmail() != null) {
-            builder.and(admin.email.containsIgnoreCase(filterRequest.getEmail()));
-        }
-        if (filterRequest.getPhoneNumber() != null) {
-            builder.and(admin.phoneNumber.eq(filterRequest.getPhoneNumber()));
-        }
-        if (filterRequest.getUsername() != null) {
-            builder.and(admin.username.containsIgnoreCase(filterRequest.getUsername()));
-        }
-        if (filterRequest.getGender() != null) {
-            builder.and(admin.gender.eq(filterRequest.getGender()));
-        }
-        if (filterRequest.getAddress() != null) {
-            builder.and(admin.address.containsIgnoreCase(filterRequest.getAddress()));
-        }
-        if (filterRequest.getHireDate() != null) {
-            builder.and(admin.hireDate.eq(filterRequest.getHireDate()));
-        }
-        if (filterRequest.getDepartmentId() != null) {
-            builder.and(admin.departmentId.eq(filterRequest.getDepartmentId()));
-        }
-        if (filterRequest.getWorkSchedule() != null) {
-            builder.and(admin.workSchedule.containsIgnoreCase(filterRequest.getWorkSchedule()));
-        }
-        if (filterRequest.getEmergencyContactName() != null) {
-            builder.and(admin.emergencyContactName.containsIgnoreCase(filterRequest.getEmergencyContactName()));
-        }
-        if (filterRequest.getEmergencyContactPhoneNumber() != null) {
-            builder.and(admin.emergencyContactPhoneNumber.eq(filterRequest.getEmergencyContactPhoneNumber()));
-        }
-        List<AdminProfile> admins = queryFactory.selectFrom(admin).where(builder).fetch();
-
-        return admins.stream()
-                .map(userProfileMapper::toAdminProfileReponse)
-                .toList();
     }
 
     private String generateAdminId() {

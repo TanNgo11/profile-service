@@ -3,11 +3,21 @@ package com.shadcn.profileservice.service.impl;
 import java.time.Year;
 import java.util.*;
 
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.jpa.JPQLQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.shadcn.profileservice.dto.request.AdminFilterRequest;
+import com.shadcn.profileservice.dto.request.StudentFilterRequest;
+import com.shadcn.profileservice.entity.AdminProfile;
+import com.shadcn.profileservice.entity.QAdminProfile;
+import com.shadcn.profileservice.entity.QStudentProfile;
 import jakarta.transaction.Transactional;
 
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -41,6 +51,7 @@ public class StudentProfileService implements IStudentProfileService {
     StudentProfileRepository studentProfileRepository;
     AuthorizeUser authorizeUser;
     UploadService uploadService;
+    JPAQueryFactory queryFactory;
 
     @Override
     @CacheEvict(value = "profiles", allEntries = true)
@@ -66,14 +77,169 @@ public class StudentProfileService implements IStudentProfileService {
     }
 
     @Override
-    public PageResponse<StudentProfileResponse> getAllStudentProfiles(int current, int pageSize) {
-        log.info("Fetching all profiles from database for student");
+    public PageResponse<StudentProfileResponse> getAllStudentProfiles(StudentFilterRequest filterRequest, int current, int pageSize) {
+        QStudentProfile student = QStudentProfile.studentProfile;
+
+        BooleanBuilder builder = buildFilterConditions(filterRequest, student);
+
+        OrderSpecifier<?> orderSpecifier = getOrderSpecifier(filterRequest, student);
 
         Pageable pageable = PageRequest.of(current - 1, pageSize);
-        Page<StudentProfile> profiles = studentProfileRepository.findAll(pageable);
 
-        return ConverToPaginationResponse.toPageResponse(profiles, userProfileMapper::toStudentProfileReponse, current);
+        JPQLQuery<StudentProfile> query = queryFactory.selectFrom(student).where(builder).orderBy(orderSpecifier);
+        long total = query.fetchCount();
+        List<StudentProfile> studentProfiles = query.offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
+
+        return ConverToPaginationResponse.toPageResponse(
+                new PageImpl<>(studentProfiles, pageable, total),
+                userProfileMapper::toStudentProfileReponse,
+                current
+        );
     }
+    private BooleanBuilder buildFilterConditions(StudentFilterRequest filterRequest, QStudentProfile student) {
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if (filterRequest.getStudentId() != null) {
+            builder.and(student.studentId.eq(filterRequest.getStudentId()));
+        }
+        if (filterRequest.getUsername() != null) {
+            builder.and(student.username.containsIgnoreCase(filterRequest.getUsername()));
+        }
+        if (filterRequest.getFirstName() != null) {
+            builder.and(student.firstName.containsIgnoreCase(filterRequest.getFirstName()));
+        }
+        if (filterRequest.getLastName() != null) {
+            builder.and(student.lastName.containsIgnoreCase(filterRequest.getLastName()));
+        }
+        if (filterRequest.getAddress() != null) {
+            builder.and(student.address.containsIgnoreCase(filterRequest.getAddress()));
+        }
+        if (filterRequest.getDateOfBirth() != null) {
+            builder.and(student.dateOfBirth.eq(filterRequest.getDateOfBirth()));
+        }
+        if (filterRequest.getPhoneNumber() != null) {
+            builder.and(student.phoneNumber.eq(filterRequest.getPhoneNumber()));
+        }
+        if (filterRequest.getGender() != null) {
+            builder.and(student.gender.eq(filterRequest.getGender()));
+        }
+        if (filterRequest.getGpa() > 0) {
+            builder.and(student.gpa.eq(filterRequest.getGpa()));
+        }
+        if (filterRequest.getEnrollmentDate() != null) {
+            builder.and(student.enrollmentDate.eq(filterRequest.getEnrollmentDate()));
+        }
+        if (filterRequest.getDepartmentId() != null) {
+            builder.and(student.departmentId.eq(Long.valueOf(filterRequest.getDepartmentId())));
+        }
+        if (filterRequest.getGuardianName() != null) {
+            builder.and(student.guardianName.containsIgnoreCase(filterRequest.getGuardianName()));
+        }
+        if (filterRequest.getGuardianPhoneNumber() != null) {
+            builder.and(student.guardianPhoneNumber.eq(filterRequest.getGuardianPhoneNumber()));
+        }
+        if (filterRequest.getEmail() != null) {
+            builder.and(student.email.containsIgnoreCase(filterRequest.getEmail()));
+        }
+        if (filterRequest.getNationality() != null) {
+            builder.and(student.nationality.containsIgnoreCase(filterRequest.getNationality()));
+        }
+        if (filterRequest.getReligion() != null) {
+            builder.and(student.religion.containsIgnoreCase(filterRequest.getReligion()));
+        }
+        if (filterRequest.getDegreeLevel() != null) {
+            builder.and(student.degreeLevel.containsIgnoreCase(filterRequest.getDegreeLevel()));
+        }
+        if (filterRequest.getAcademicYearId() != null) {
+            builder.and(student.academicYearId.eq(filterRequest.getAcademicYearId()));
+        }
+        if (filterRequest.getPresent() != null) {
+            builder.and(student.present.eq(filterRequest.getPresent()));
+        }
+        if (filterRequest.getAvatarPath() != null) {
+            builder.and(student.avatarPath.containsIgnoreCase(filterRequest.getAvatarPath()));
+        }
+
+        return builder;
+    }
+
+    private OrderSpecifier<?> getOrderSpecifier(StudentFilterRequest filterRequest, QStudentProfile student) {
+        boolean isAscending = filterRequest.getSortDirection() == null || "asc".equalsIgnoreCase(filterRequest.getSortDirection());
+        String sortBy = filterRequest.getSortBy() != null ? filterRequest.getSortBy() : "id";
+        OrderSpecifier<?> orderSpecifier;
+
+        switch (sortBy) {
+            case "id":
+                orderSpecifier = isAscending ? student.id.asc() : student.id.desc();
+                break;
+            case "studentId":
+                orderSpecifier = isAscending ? student.studentId.asc() : student.studentId.desc();
+                break;
+            case "username":
+                orderSpecifier = isAscending ? student.username.asc() : student.username.desc();
+                break;
+            case "firstName":
+                orderSpecifier = isAscending ? student.firstName.asc() : student.firstName.desc();
+                break;
+            case "lastName":
+                orderSpecifier = isAscending ? student.lastName.asc() : student.lastName.desc();
+                break;
+            case "address":
+                orderSpecifier = isAscending ? student.address.asc() : student.address.desc();
+                break;
+            case "dateOfBirth":
+                orderSpecifier = isAscending ? student.dateOfBirth.asc() : student.dateOfBirth.desc();
+                break;
+            case "phoneNumber":
+                orderSpecifier = isAscending ? student.phoneNumber.asc() : student.phoneNumber.desc();
+                break;
+            case "gender":
+                orderSpecifier = isAscending ? student.gender.asc() : student.gender.desc();
+                break;
+            case "gpa":
+                orderSpecifier = isAscending ? student.gpa.asc() : student.gpa.desc();
+                break;
+            case "enrollmentDate":
+                orderSpecifier = isAscending ? student.enrollmentDate.asc() : student.enrollmentDate.desc();
+                break;
+            case "departmentId":
+                orderSpecifier = isAscending ? student.departmentId.asc() : student.departmentId.desc();
+                break;
+            case "guardianName":
+                orderSpecifier = isAscending ? student.guardianName.asc() : student.guardianName.desc();
+                break;
+            case "guardianPhoneNumber":
+                orderSpecifier = isAscending ? student.guardianPhoneNumber.asc() : student.guardianPhoneNumber.desc();
+                break;
+            case "email":
+                orderSpecifier = isAscending ? student.email.asc() : student.email.desc();
+                break;
+            case "nationality":
+                orderSpecifier = isAscending ? student.nationality.asc() : student.nationality.desc();
+                break;
+            case "religion":
+                orderSpecifier = isAscending ? student.religion.asc() : student.religion.desc();
+                break;
+            case "degreeLevel":
+                orderSpecifier = isAscending ? student.degreeLevel.asc() : student.degreeLevel.desc();
+                break;
+            case "academicYearId":
+                orderSpecifier = isAscending ? student.academicYearId.asc() : student.academicYearId.desc();
+                break;
+            case "present":
+                orderSpecifier = isAscending ? student.present.asc() : student.present.desc();
+                break;
+            case "avatarPath":
+                orderSpecifier = isAscending ? student.avatarPath.asc() : student.avatarPath.desc();
+                break;
+            default:
+                log.warn("Invalid sort field: {}, defaulting to studentId", sortBy);
+                orderSpecifier = student.studentId.asc();
+        }
+
+        return orderSpecifier;
+    }
+
 
     @Override
     public List<StudentProfileResponse> getAllStudentProfilesByIds(long[] ids) {
