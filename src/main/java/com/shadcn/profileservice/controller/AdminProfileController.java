@@ -6,13 +6,12 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import com.shadcn.profileservice.enums.Gender;
 import org.springframework.security.access.prepost.*;
 import org.springframework.web.bind.annotation.*;
 
 import com.shadcn.profileservice.dto.request.*;
 import com.shadcn.profileservice.dto.response.*;
-import com.shadcn.profileservice.entity.AdminProfile;
+import com.shadcn.profileservice.enums.Gender;
 import com.shadcn.profileservice.service.*;
 
 import lombok.*;
@@ -68,7 +67,8 @@ public class AdminProfileController {
                 .username(username)
                 .gender(gender)
                 .address(address)
-                .hireDate(hireDate != null ? LocalDate.parse(hireDate, DateTimeFormatter.ofPattern("dd-MM-yyyy")) : null)
+                .hireDate(
+                        hireDate != null ? LocalDate.parse(hireDate, DateTimeFormatter.ofPattern("dd-MM-yyyy")) : null)
                 .departmentId(departmentId)
                 .workSchedule(workSchedule)
                 .emergencyContactName(emergencyContactName)

@@ -3,8 +3,6 @@ package com.shadcn.profileservice.service.impl;
 import java.time.*;
 import java.util.*;
 
-import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.jpa.JPQLQuery;
 import jakarta.transaction.*;
 
 import org.springframework.cache.annotation.*;
@@ -12,6 +10,8 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.shadcn.profileservice.dto.request.*;
 import com.shadcn.profileservice.dto.response.*;
@@ -60,7 +60,8 @@ public class AdminProfileService implements IAdminProfileService {
     }
 
     @Override
-    public PageResponse<AdminProfileResponse> getAllAdminProfiles(AdminFilterRequest filterRequest, int current, int pageSize) {
+    public PageResponse<AdminProfileResponse> getAllAdminProfiles(
+            AdminFilterRequest filterRequest, int current, int pageSize) {
         QAdminProfile admin = QAdminProfile.adminProfile;
 
         BooleanBuilder builder = buildFilterConditions(filterRequest, admin);
@@ -69,16 +70,16 @@ public class AdminProfileService implements IAdminProfileService {
 
         Pageable pageable = PageRequest.of(current - 1, pageSize);
 
-        JPQLQuery<AdminProfile> query = queryFactory.selectFrom(admin).where(builder).orderBy(orderSpecifier);
+        JPQLQuery<AdminProfile> query =
+                queryFactory.selectFrom(admin).where(builder).orderBy(orderSpecifier);
         long total = query.fetchCount();
-        List<AdminProfile> adminProfiles = query.offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
+        List<AdminProfile> adminProfiles =
+                query.offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
 
         return ConverToPaginationResponse.toPageResponse(
-                new PageImpl<>(adminProfiles, pageable, total),
-                userProfileMapper::toAdminProfileReponse,
-                current
-        );
+                new PageImpl<>(adminProfiles, pageable, total), userProfileMapper::toAdminProfileReponse, current);
     }
+
     private BooleanBuilder buildFilterConditions(AdminFilterRequest filterRequest, QAdminProfile admin) {
         BooleanBuilder builder = new BooleanBuilder();
 
@@ -124,7 +125,8 @@ public class AdminProfileService implements IAdminProfileService {
 
     private OrderSpecifier<?> getOrderSpecifier(AdminFilterRequest filterRequest, QAdminProfile admin) {
         String sortBy = filterRequest.getSortBy() != null ? filterRequest.getSortBy() : "id";
-        boolean isAscending = filterRequest.getSortDirection() == null || "asc".equalsIgnoreCase(filterRequest.getSortDirection());
+        boolean isAscending =
+                filterRequest.getSortDirection() == null || "asc".equalsIgnoreCase(filterRequest.getSortDirection());
         OrderSpecifier<?> orderSpecifier;
 
         switch (sortBy) {
@@ -165,7 +167,9 @@ public class AdminProfileService implements IAdminProfileService {
                 orderSpecifier = isAscending ? admin.emergencyContactName.asc() : admin.emergencyContactName.desc();
                 break;
             case "emergencyContactPhoneNumber":
-                orderSpecifier = isAscending ? admin.emergencyContactPhoneNumber.asc() : admin.emergencyContactPhoneNumber.desc();
+                orderSpecifier = isAscending
+                        ? admin.emergencyContactPhoneNumber.asc()
+                        : admin.emergencyContactPhoneNumber.desc();
                 break;
             default:
                 orderSpecifier = admin.id.asc();
@@ -173,7 +177,6 @@ public class AdminProfileService implements IAdminProfileService {
 
         return orderSpecifier;
     }
-
 
     @Override
     public List<AdminProfileResponse> getAllAdminProfilesByIds(long[] ids) {

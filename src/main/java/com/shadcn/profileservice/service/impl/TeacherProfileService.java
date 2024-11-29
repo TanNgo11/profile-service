@@ -6,28 +6,25 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.jpa.JPQLQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.shadcn.profileservice.dto.request.TeacherFilterRequest;
-import com.shadcn.profileservice.entity.QStudentProfile;
-import com.shadcn.profileservice.entity.QTeacherProfile;
-import com.shadcn.profileservice.entity.StudentProfile;
 import jakarta.transaction.Transactional;
 
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.jpa.JPQLQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.shadcn.profileservice.dto.request.TeacherFilterRequest;
 import com.shadcn.profileservice.dto.request.TeacherProfileCreationRequest;
 import com.shadcn.profileservice.dto.request.UpdateTeacherProfileRequest;
 import com.shadcn.profileservice.dto.response.PageResponse;
 import com.shadcn.profileservice.dto.response.TeacherProfileResponse;
+import com.shadcn.profileservice.entity.QTeacherProfile;
 import com.shadcn.profileservice.entity.TeacherProfile;
 import com.shadcn.profileservice.exception.AppException;
 import com.shadcn.profileservice.exception.ErrorCode;
@@ -76,7 +73,7 @@ public class TeacherProfileService implements ITeacherProfileService {
     @CachePut(value = "teacherProfiles", key = "#id")
     public void updateTeacherProfile(String id, UpdateTeacherProfileRequest request) {
         TeacherProfile existingProfile = teacherProfileRepository
-                .findByTeacherId(id)
+                .findById(Long.parseLong(id))
                 .orElseThrow(() -> new AppException(ErrorCode.TEACHER_NOT_EXISTED));
 
         authorizeUser.checkAuthorizeUser();
@@ -97,14 +94,15 @@ public class TeacherProfileService implements ITeacherProfileService {
     @Override
     public TeacherProfileResponse getPublicTeacherProfile(String id) {
         TeacherProfile teacherProfile = teacherProfileRepository
-                .findByTeacherId(id)
+                .findById(Long.parseLong(id))
                 .orElseThrow(() -> new AppException(ErrorCode.TEACHER_NOT_EXISTED));
         authorizeUser.checkAuthorizeUser();
         return userProfileMapper.toTeacherProfileReponse(teacherProfile);
     }
 
     @Override
-    public PageResponse<TeacherProfileResponse> getAllTeacherProfiles(TeacherFilterRequest filterRequest, int current, int pageSize) {
+    public PageResponse<TeacherProfileResponse> getAllTeacherProfiles(
+            TeacherFilterRequest filterRequest, int current, int pageSize) {
         QTeacherProfile teacher = QTeacherProfile.teacherProfile;
 
         BooleanBuilder builder = buildFilterConditions(filterRequest, teacher);
@@ -113,16 +111,16 @@ public class TeacherProfileService implements ITeacherProfileService {
 
         Pageable pageable = PageRequest.of(current - 1, pageSize);
 
-        JPQLQuery<TeacherProfile> query = queryFactory.selectFrom(teacher).where(builder).orderBy(orderSpecifier);
+        JPQLQuery<TeacherProfile> query =
+                queryFactory.selectFrom(teacher).where(builder).orderBy(orderSpecifier);
         long total = query.fetchCount();
-        List<TeacherProfile> teacherProfiles = query.offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
+        List<TeacherProfile> teacherProfiles =
+                query.offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
 
         return ConverToPaginationResponse.toPageResponse(
-                new PageImpl<>(teacherProfiles, pageable, total),
-                userProfileMapper::toTeacherProfileReponse,
-                current
-        );
+                new PageImpl<>(teacherProfiles, pageable, total), userProfileMapper::toTeacherProfileReponse, current);
     }
+
     private BooleanBuilder buildFilterConditions(TeacherFilterRequest filterRequest, QTeacherProfile teacher) {
         BooleanBuilder builder = new BooleanBuilder();
 
@@ -177,6 +175,7 @@ public class TeacherProfileService implements ITeacherProfileService {
 
         return builder;
     }
+
     private OrderSpecifier<?> getOrderSpecifier(TeacherFilterRequest filterRequest, QTeacherProfile teacher) {
         boolean isAscending = "asc".equalsIgnoreCase(filterRequest.getSortDirection());
         String sortBy = filterRequest.getSortBy() != null ? filterRequest.getSortBy() : "teacherId";
@@ -212,7 +211,9 @@ public class TeacherProfileService implements ITeacherProfileService {
                 orderSpecifier = isAscending ? teacher.emergencyContactName.asc() : teacher.emergencyContactName.desc();
                 break;
             case "emergencyContactPhoneNumber":
-                orderSpecifier = isAscending ? teacher.emergencyContactPhoneNumber.asc() : teacher.emergencyContactPhoneNumber.desc();
+                orderSpecifier = isAscending
+                        ? teacher.emergencyContactPhoneNumber.asc()
+                        : teacher.emergencyContactPhoneNumber.desc();
                 break;
             case "firstName":
                 orderSpecifier = isAscending ? teacher.firstName.asc() : teacher.firstName.desc();
@@ -242,6 +243,7 @@ public class TeacherProfileService implements ITeacherProfileService {
 
         return orderSpecifier;
     }
+
     @Override
     public List<TeacherProfileResponse> getAllTeacherProfilesByIds(long[] ids) {
         log.info("Fetching teacher profiles by IDs: {}", ids);
