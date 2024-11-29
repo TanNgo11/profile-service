@@ -6,17 +6,17 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import com.shadcn.profileservice.dto.request.StudentFilterRequest;
-import com.shadcn.profileservice.enums.Gender;
-import com.shadcn.profileservice.enums.Present;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import com.shadcn.profileservice.dto.request.StudentFilterRequest;
 import com.shadcn.profileservice.dto.request.StudentProfileCreationRequest;
 import com.shadcn.profileservice.dto.request.UpdateStudentProfileRequest;
 import com.shadcn.profileservice.dto.response.ApiResponse;
 import com.shadcn.profileservice.dto.response.PageResponse;
 import com.shadcn.profileservice.dto.response.StudentProfileResponse;
+import com.shadcn.profileservice.enums.Gender;
+import com.shadcn.profileservice.enums.Present;
 import com.shadcn.profileservice.service.IStudentProfileService;
 
 import lombok.AccessLevel;
@@ -85,11 +85,17 @@ public class StudentProfileController {
                 .firstName(firstName)
                 .lastName(lastName)
                 .address(address)
-                .dateOfBirth(dateOfBirth != null ? LocalDate.parse(dateOfBirth, DateTimeFormatter.ofPattern("dd-MM-yyyy")) : null)
+                .dateOfBirth(
+                        dateOfBirth != null
+                                ? LocalDate.parse(dateOfBirth, DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+                                : null)
                 .phoneNumber(phoneNumber)
                 .gender(gender)
                 .gpa(gpa != null ? gpa : 0.0) // Default GPA to 0.0 if not provided
-                .enrollmentDate(enrollmentDate != null ? LocalDate.parse(enrollmentDate, DateTimeFormatter.ofPattern("dd-MM-yyyy")) : null)
+                .enrollmentDate(
+                        enrollmentDate != null
+                                ? LocalDate.parse(enrollmentDate, DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+                                : null)
                 .departmentId(departmentId)
                 .guardianName(guardianName)
                 .guardianPhoneNumber(guardianPhoneNumber)
@@ -106,7 +112,6 @@ public class StudentProfileController {
 
         return ApiResponse.success(studentProfileService.getAllStudentProfiles(filterRequest, current, pageSize));
     }
-
 
     @GetMapping("/users/students/ids")
     @PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")

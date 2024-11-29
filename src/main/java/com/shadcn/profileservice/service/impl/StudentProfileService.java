@@ -3,29 +3,25 @@ package com.shadcn.profileservice.service.impl;
 import java.time.Year;
 import java.util.*;
 
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.jpa.JPQLQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.shadcn.profileservice.dto.request.AdminFilterRequest;
-import com.shadcn.profileservice.dto.request.StudentFilterRequest;
-import com.shadcn.profileservice.entity.AdminProfile;
-import com.shadcn.profileservice.entity.QAdminProfile;
-import com.shadcn.profileservice.entity.QStudentProfile;
 import jakarta.transaction.Transactional;
 
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.jpa.JPQLQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.shadcn.profileservice.dto.request.StudentFilterRequest;
 import com.shadcn.profileservice.dto.request.StudentProfileCreationRequest;
 import com.shadcn.profileservice.dto.request.UpdateStudentProfileRequest;
 import com.shadcn.profileservice.dto.response.PageResponse;
 import com.shadcn.profileservice.dto.response.StudentProfileResponse;
+import com.shadcn.profileservice.entity.QStudentProfile;
 import com.shadcn.profileservice.entity.StudentProfile;
 import com.shadcn.profileservice.enums.Present;
 import com.shadcn.profileservice.exception.AppException;
@@ -77,7 +73,8 @@ public class StudentProfileService implements IStudentProfileService {
     }
 
     @Override
-    public PageResponse<StudentProfileResponse> getAllStudentProfiles(StudentFilterRequest filterRequest, int current, int pageSize) {
+    public PageResponse<StudentProfileResponse> getAllStudentProfiles(
+            StudentFilterRequest filterRequest, int current, int pageSize) {
         QStudentProfile student = QStudentProfile.studentProfile;
 
         BooleanBuilder builder = buildFilterConditions(filterRequest, student);
@@ -86,16 +83,16 @@ public class StudentProfileService implements IStudentProfileService {
 
         Pageable pageable = PageRequest.of(current - 1, pageSize);
 
-        JPQLQuery<StudentProfile> query = queryFactory.selectFrom(student).where(builder).orderBy(orderSpecifier);
+        JPQLQuery<StudentProfile> query =
+                queryFactory.selectFrom(student).where(builder).orderBy(orderSpecifier);
         long total = query.fetchCount();
-        List<StudentProfile> studentProfiles = query.offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
+        List<StudentProfile> studentProfiles =
+                query.offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
 
         return ConverToPaginationResponse.toPageResponse(
-                new PageImpl<>(studentProfiles, pageable, total),
-                userProfileMapper::toStudentProfileReponse,
-                current
-        );
+                new PageImpl<>(studentProfiles, pageable, total), userProfileMapper::toStudentProfileReponse, current);
     }
+
     private BooleanBuilder buildFilterConditions(StudentFilterRequest filterRequest, QStudentProfile student) {
         BooleanBuilder builder = new BooleanBuilder();
 
@@ -164,7 +161,8 @@ public class StudentProfileService implements IStudentProfileService {
     }
 
     private OrderSpecifier<?> getOrderSpecifier(StudentFilterRequest filterRequest, QStudentProfile student) {
-        boolean isAscending = filterRequest.getSortDirection() == null || "asc".equalsIgnoreCase(filterRequest.getSortDirection());
+        boolean isAscending =
+                filterRequest.getSortDirection() == null || "asc".equalsIgnoreCase(filterRequest.getSortDirection());
         String sortBy = filterRequest.getSortBy() != null ? filterRequest.getSortBy() : "id";
         OrderSpecifier<?> orderSpecifier;
 
@@ -239,7 +237,6 @@ public class StudentProfileService implements IStudentProfileService {
 
         return orderSpecifier;
     }
-
 
     @Override
     public List<StudentProfileResponse> getAllStudentProfilesByIds(long[] ids) {

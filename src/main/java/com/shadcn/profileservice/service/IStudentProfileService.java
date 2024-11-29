@@ -18,5 +18,6 @@ public interface IStudentProfileService {
 
     List<StudentProfileResponse> getAllStudentProfilesByUsernames(String[] usernames);
 
-    PageResponse<StudentProfileResponse> getAllStudentProfiles(StudentFilterRequest filterRequest, int current, int pageSize);
+    PageResponse<StudentProfileResponse> getAllStudentProfiles(
+            StudentFilterRequest filterRequest, int current, int pageSize);
 }

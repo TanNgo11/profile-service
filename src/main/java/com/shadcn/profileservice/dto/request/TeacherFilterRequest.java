@@ -1,14 +1,15 @@
 package com.shadcn.profileservice.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.shadcn.profileservice.enums.Gender;
-import com.shadcn.profileservice.enums.Present;
+import java.time.LocalDate;
+
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.shadcn.profileservice.enums.Gender;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDate;
 
 @Data
 @Builder
