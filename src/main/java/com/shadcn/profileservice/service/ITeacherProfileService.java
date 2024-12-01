@@ -21,4 +21,8 @@ public interface ITeacherProfileService {
 
     PageResponse<TeacherProfileResponse> getAllTeacherProfiles(
             TeacherFilterRequest filterRequest, int current, int pageSize);
+
+    void deleteTeacherProfiles(String[] ids);
+
+    void deleteTeacherProfileById(String id);
 }
