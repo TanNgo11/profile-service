@@ -121,6 +121,27 @@ public class TeacherProfileService implements ITeacherProfileService {
                 new PageImpl<>(teacherProfiles, pageable, total), userProfileMapper::toTeacherProfileReponse, current);
     }
 
+    @Override
+    public void deleteTeacherProfiles(String[] ids) {
+        List<Long> missingIds = new ArrayList<>();
+
+        authorizeUser.checkAuthorizeUser();
+        for (String id : ids) {
+            teacherProfileRepository.findById(Long.parseLong(id))
+                            .ifPresentOrElse(teacherProfileRepository::delete, () -> missingIds.add(Long.parseLong(id)));
+        }
+
+        if(!missingIds.isEmpty()) {
+            log.warn("Teacher profiles not found for IDs: {}", missingIds);
+        }
+    }
+
+    @Override
+    public void deleteTeacherProfileById(String id) {
+        authorizeUser.checkAuthorizeUser();
+        teacherProfileRepository.deleteById(Long.parseLong(id));
+    }
+
     private BooleanBuilder buildFilterConditions(TeacherFilterRequest filterRequest, QTeacherProfile teacher) {
         BooleanBuilder builder = new BooleanBuilder();
 
