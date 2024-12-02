@@ -48,7 +48,7 @@ public class StudentProfileCreationRequest {
 
     String degreeLevel;
 
-    String academicYearId;
+    Long academicYearId;
 
     String avatar;
 

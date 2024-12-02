@@ -55,7 +55,7 @@ public class StudentFilterRequest {
 
     String degreeLevel;
 
-    String academicYearId;
+    Long academicYearId;
 
     @Enumerated(EnumType.STRING)
     Present present;

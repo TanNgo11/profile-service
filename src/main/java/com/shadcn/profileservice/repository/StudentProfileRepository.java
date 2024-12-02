@@ -14,4 +14,8 @@ public interface StudentProfileRepository extends JpaRepository<StudentProfile, 
     Optional<StudentProfile> findByUsername(String username);
 
     boolean existsByPhoneNumber(String phone);
+
+    List<StudentProfile> findAllByUsernameIn(List<String> usernames);
+
+    List<StudentProfile> findAllByAcademicYearId(Long academicYearId);
 }
