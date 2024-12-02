@@ -17,5 +17,6 @@ public interface IAdminProfileService {
 
     List<AdminProfileResponse> getAllAdminProfilesByUsernames(String[] usernames);
 
-    void updateAdminProfile(String id, UpdateAdminProfileRequest request);
+    void updateAdminProfile(Long adminId, UpdateAdminProfileRequest request);
+    AdminProfileResponse getAdminProfileById(Long id);
 }

@@ -127,11 +127,12 @@ public class TeacherProfileService implements ITeacherProfileService {
 
         authorizeUser.checkAuthorizeUser();
         for (String id : ids) {
-            teacherProfileRepository.findById(Long.parseLong(id))
-                            .ifPresentOrElse(teacherProfileRepository::delete, () -> missingIds.add(Long.parseLong(id)));
+            teacherProfileRepository
+                    .findById(Long.parseLong(id))
+                    .ifPresentOrElse(teacherProfileRepository::delete, () -> missingIds.add(Long.parseLong(id)));
         }
 
-        if(!missingIds.isEmpty()) {
+        if (!missingIds.isEmpty()) {
             log.warn("Teacher profiles not found for IDs: {}", missingIds);
         }
     }
