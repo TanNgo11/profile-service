@@ -79,11 +79,11 @@ public class AdminProfileController {
         return ApiResponse.success(adminProfileService.getAllAdminProfiles(filterRequest, current, pageSize));
     }
 
-    @PutMapping("/users/admin/{profileId}")
+    @PutMapping("/users/admin/{adminId}")
     @PreAuthorize("hasRole('ADMIN')")
     ApiResponse<Void> updateAdminProfile(
-            @PathVariable String profileId, @RequestBody UpdateAdminProfileRequest request) {
-        adminProfileService.updateAdminProfile(profileId, request);
+            @PathVariable Long adminId, @RequestBody UpdateAdminProfileRequest request) {
+        adminProfileService.updateAdminProfile(adminId, request);
         return ApiResponse.empty();
     }
 
@@ -91,5 +91,11 @@ public class AdminProfileController {
     @PreAuthorize("hasRole('ADMIN')")
     public ApiResponse<List<AdminProfileResponse>> getAllAdminProfilesByIds(@RequestParam long[] adminIds) {
         return ApiResponse.success(adminProfileService.getAllAdminProfilesByIds(adminIds));
+    }
+
+    @GetMapping("/users/admins/{adminId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ApiResponse<AdminProfileResponse> getAdminProfileById(@PathVariable Long adminId) {
+        return ApiResponse.success(adminProfileService.getAdminProfileById(adminId));
     }
 }

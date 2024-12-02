@@ -20,6 +20,6 @@ public interface IStudentProfileService {
 
     PageResponse<StudentProfileResponse> getAllStudentProfiles(
             StudentFilterRequest filterRequest, int current, int pageSize);
-    
+
     List<StudentProfileResponse> getAllStudentByAcademicYearId(Long academicYearId);
 }

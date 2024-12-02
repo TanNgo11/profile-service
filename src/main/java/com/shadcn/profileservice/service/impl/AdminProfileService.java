@@ -220,10 +220,10 @@ public class AdminProfileService implements IAdminProfileService {
     @Transactional
     @CacheEvict(value = "adminProfiles", allEntries = true)
     @CachePut(value = "adminProfiles", key = "#id")
-    public void updateAdminProfile(String id, UpdateAdminProfileRequest request) {
+    public void updateAdminProfile(Long id, UpdateAdminProfileRequest request) {
 
         AdminProfile existingProfile = adminProfileRepository
-                .findByAdminId(id)
+                .findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.ADMIN_NOT_EXISTED));
         authorizeUser.checkAuthorizeUser();
         userProfileMapper.updateAdminProfileFromRequest(request, existingProfile);
@@ -243,5 +243,13 @@ public class AdminProfileService implements IAdminProfileService {
 
         // Format the new admin_id as Year + 6 digit order number (e.g., 2024000001)
         return year + String.format("%06d", orderNumber);
+    }
+    @Override
+    public AdminProfileResponse getAdminProfileById(Long id) {
+        AdminProfile adminProfile = adminProfileRepository
+                .findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.ADMIN_NOT_EXISTED));
+
+        return userProfileMapper.toAdminProfileReponse(adminProfile);
     }
 }
