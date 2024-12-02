@@ -239,6 +239,16 @@ public class StudentProfileService implements IStudentProfileService {
     }
 
     @Override
+    public List<StudentProfileResponse> getAllStudentByAcademicYearId(Long academicYearId) {
+        log.info("Fetching all profiles from database for student by academic year ID: {}", academicYearId);
+        Set<StudentProfile> studentProfiles = new HashSet<>();
+        studentProfileRepository.findAllByAcademicYearId(academicYearId).forEach(studentProfiles::add);
+        return studentProfiles.stream()
+                .map(userProfileMapper::toStudentProfileReponse)
+                .toList();
+    }
+
+    @Override
     public List<StudentProfileResponse> getAllStudentProfilesByIds(long[] ids) {
         log.info("Fetching student profiles by IDs: {}", Arrays.toString(ids));
         Set<StudentProfile> studentProfiles = new HashSet<>();
@@ -267,20 +277,10 @@ public class StudentProfileService implements IStudentProfileService {
     }
 
     @Override
-    public List<StudentProfileResponse> getAllStudentProfilesByUsernames(String[] usernames) {
-        log.info("Fetching student profiles by usernames: {}", Arrays.toString(usernames));
+    public List<StudentProfileResponse> getAllStudentProfilesByUsernames(List<String> usernames) {
+
         Set<StudentProfile> studentProfiles = new HashSet<>();
-        List<String> missingUsernames = new ArrayList<>();
-
-        for (String username : usernames) {
-            studentProfileRepository
-                    .findByUsername(username)
-                    .ifPresentOrElse(studentProfiles::add, () -> missingUsernames.add(username));
-        }
-
-        if (!missingUsernames.isEmpty()) {
-            log.warn("Usernames not found: {}", missingUsernames);
-        }
+        studentProfileRepository.findAllByUsernameIn(usernames).forEach(studentProfiles::add);
         return studentProfiles.stream()
                 .map(userProfileMapper::toStudentProfileReponse)
                 .toList();

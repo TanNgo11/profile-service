@@ -71,7 +71,7 @@ public class StudentProfileController {
             @RequestParam(required = false) String nationality,
             @RequestParam(required = false) String religion,
             @RequestParam(required = false) String degreeLevel,
-            @RequestParam(required = false) String academicYearId,
+            @RequestParam(required = false) Long academicYearId,
             @RequestParam(required = false) Present present,
             @RequestParam(required = false) String avatarPath,
             @RequestParam(required = false) String sortBy,
@@ -125,11 +125,16 @@ public class StudentProfileController {
         return ApiResponse.success(studentProfileService.getStudentProfileById(studentId));
     }
 
-    //    @GetMapping("/users/students/usernames")
-    //    @PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
-    //    public ApiResponse<List<StudentProfileResponse>> getAllStudentProfilesByUsernames(@RequestParam String[]
-    // usernames) {
-    //        return ApiResponse.success(studentProfileService.getAllStudentProfilesByUsernames(usernames));
-    //    }
+    @PostMapping("/users/students/usernames")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
+    public ApiResponse<List<StudentProfileResponse>> getAllStudentProfilesByUsernames(
+            @RequestBody List<String> usernames) {
+        return ApiResponse.success(studentProfileService.getAllStudentProfilesByUsernames(usernames));
+    }
 
+    @GetMapping("/users/students/academic-year/{academicYearId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
+    public ApiResponse<List<StudentProfileResponse>> getAllStudentByAcademicYearId(@PathVariable Long academicYearId) {
+        return ApiResponse.success(studentProfileService.getAllStudentByAcademicYearId(academicYearId));
+    }
 }

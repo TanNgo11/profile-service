@@ -16,8 +16,10 @@ public interface IStudentProfileService {
 
     StudentProfileResponse getStudentProfileById(Long id);
 
-    List<StudentProfileResponse> getAllStudentProfilesByUsernames(String[] usernames);
+    List<StudentProfileResponse> getAllStudentProfilesByUsernames(List<String> usernames);
 
     PageResponse<StudentProfileResponse> getAllStudentProfiles(
             StudentFilterRequest filterRequest, int current, int pageSize);
+    
+    List<StudentProfileResponse> getAllStudentByAcademicYearId(Long academicYearId);
 }

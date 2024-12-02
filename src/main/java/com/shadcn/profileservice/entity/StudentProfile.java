@@ -62,7 +62,7 @@ public class StudentProfile extends BaseEntity implements Serializable {
     // Ex: Đại học chính quy Tiếng Việt K10
     String degreeLevel;
 
-    String academicYearId;
+    Long academicYearId;
 
     @Enumerated(EnumType.STRING)
     Present present;
