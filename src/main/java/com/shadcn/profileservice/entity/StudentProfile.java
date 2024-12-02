@@ -28,6 +28,8 @@ public class StudentProfile extends BaseEntity implements Serializable {
     String username;
 
     String firstName;
+    
+    String middleName;
 
     String lastName;
 

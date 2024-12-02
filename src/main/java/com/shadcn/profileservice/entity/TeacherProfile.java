@@ -43,6 +43,8 @@ public class TeacherProfile extends BaseEntity implements Serializable {
 
     String firstName;
 
+    String middleName;
+
     String lastName;
 
     @JsonFormat(pattern = "dd-MM-yyyy")

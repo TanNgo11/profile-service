@@ -26,6 +26,8 @@ public class StudentProfileResponse extends BaseDTOResponse implements Serializa
     String username;
 
     String firstName;
+    
+    String middleName;
 
     String lastName;
 
