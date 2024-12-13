@@ -38,7 +38,7 @@ public class AdminProfileResponse extends BaseDTOResponse implements Serializabl
     String emergencyContactPhoneNumber;
 
     String firstName;
-    
+
     String middleName;
 
     String lastName;
