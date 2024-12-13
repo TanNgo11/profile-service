@@ -81,8 +81,7 @@ public class AdminProfileController {
 
     @PutMapping("/users/admin/{adminId}")
     @PreAuthorize("hasRole('ADMIN')")
-    ApiResponse<Void> updateAdminProfile(
-            @PathVariable Long adminId, @RequestBody UpdateAdminProfileRequest request) {
+    ApiResponse<Void> updateAdminProfile(@PathVariable Long adminId, @RequestBody UpdateAdminProfileRequest request) {
         adminProfileService.updateAdminProfile(adminId, request);
         return ApiResponse.empty();
     }

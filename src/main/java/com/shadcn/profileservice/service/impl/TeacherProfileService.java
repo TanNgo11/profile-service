@@ -122,18 +122,18 @@ public class TeacherProfileService implements ITeacherProfileService {
     }
 
     @Override
-    public void deleteTeacherProfiles(String[] ids) {
-        List<Long> missingIds = new ArrayList<>();
+    public void deleteTeacherProfiles(String[] teacherUsernames) {
+        List<String> missingUsernames = new ArrayList<>();
 
         authorizeUser.checkAuthorizeUser();
-        for (String id : ids) {
+        for (String username : teacherUsernames) {
             teacherProfileRepository
-                    .findById(Long.parseLong(id))
-                    .ifPresentOrElse(teacherProfileRepository::delete, () -> missingIds.add(Long.parseLong(id)));
+                    .findByUsername(username)
+                    .ifPresentOrElse(teacherProfileRepository::delete, () -> missingUsernames.add(username));
         }
 
-        if (!missingIds.isEmpty()) {
-            log.warn("Teacher profiles not found for IDs: {}", missingIds);
+        if (!missingUsernames.isEmpty()) {
+            log.warn("Teacher profiles not found for IDs: {}", missingUsernames);
         }
     }
 
