@@ -114,12 +114,12 @@ public class TeacherProfileController {
     //        return ApiResponse.success(teacherProfileService.getAllTeacherProfilesByUsernames(usernames));
     //    }
 
-//    @DeleteMapping("/users/teachers/delete")
-//    @PreAuthorize("hasRole('ADMIN')")
-//    public ApiResponse<Void> deleteTeacherProfiles(@RequestBody String[] teacherIds) {
-//        teacherProfileService.deleteTeacherProfiles(teacherIds);
-//        return ApiResponse.empty();
-//    }
+    //    @DeleteMapping("/users/teachers/delete")
+    //    @PreAuthorize("hasRole('ADMIN')")
+    //    public ApiResponse<Void> deleteTeacherProfiles(@RequestBody String[] teacherIds) {
+    //        teacherProfileService.deleteTeacherProfiles(teacherIds);
+    //        return ApiResponse.empty();
+    //    }
 
     @DeleteMapping("/users/teachers/delete/{teacherId}")
     @PreAuthorize("hasRole('ADMIN')")

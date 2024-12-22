@@ -22,4 +22,6 @@ public interface IStudentProfileService {
             StudentFilterRequest filterRequest, int current, int pageSize);
 
     List<StudentProfileResponse> getAllStudentByAcademicYearId(Long academicYearId);
+
+    void deleteStudents(List<String> studentUsernames);
 }

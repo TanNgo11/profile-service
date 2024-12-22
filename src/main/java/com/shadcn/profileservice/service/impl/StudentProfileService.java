@@ -249,6 +249,23 @@ public class StudentProfileService implements IStudentProfileService {
     }
 
     @Override
+    public void deleteStudents(List<String> studentUsernames) {
+        log.info("Deleting student profiles by usernames: {}", studentUsernames);
+        List<String> missingUsernames = new ArrayList<>();
+
+        authorizeUser.checkAuthorizeUser();
+        for (String username : studentUsernames) {
+            studentProfileRepository
+                    .findByUsername(username)
+                    .ifPresentOrElse(studentProfileRepository::delete, () -> missingUsernames.add(username));
+        }
+
+        if (!missingUsernames.isEmpty()) {
+            log.warn("Student profiles not found for IDs: {}", missingUsernames);
+        }
+    }
+
+    @Override
     public List<StudentProfileResponse> getAllStudentProfilesByIds(long[] ids) {
         log.info("Fetching student profiles by IDs: {}", Arrays.toString(ids));
         Set<StudentProfile> studentProfiles = new HashSet<>();
