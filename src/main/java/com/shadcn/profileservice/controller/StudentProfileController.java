@@ -137,4 +137,11 @@ public class StudentProfileController {
     public ApiResponse<List<StudentProfileResponse>> getAllStudentByAcademicYearId(@PathVariable Long academicYearId) {
         return ApiResponse.success(studentProfileService.getAllStudentByAcademicYearId(academicYearId));
     }
+
+    @DeleteMapping("/users/students/delete")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ApiResponse<Void> deleteStudents(@RequestBody List<String> studentUsernames) {
+        studentProfileService.deleteStudents(studentUsernames);
+        return ApiResponse.empty();
+    }
 }
