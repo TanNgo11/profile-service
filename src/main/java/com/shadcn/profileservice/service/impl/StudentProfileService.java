@@ -97,7 +97,7 @@ public class StudentProfileService implements IStudentProfileService {
         BooleanBuilder builder = new BooleanBuilder();
 
         if (filterRequest.getStudentId() != null) {
-            builder.and(student.studentId.eq(filterRequest.getStudentId()));
+            builder.and(student.studentId.containsIgnoreCase(filterRequest.getStudentId()));
         }
         if (filterRequest.getUsername() != null) {
             builder.and(student.username.containsIgnoreCase(filterRequest.getUsername()));
@@ -112,28 +112,28 @@ public class StudentProfileService implements IStudentProfileService {
             builder.and(student.address.containsIgnoreCase(filterRequest.getAddress()));
         }
         if (filterRequest.getDateOfBirth() != null) {
-            builder.and(student.dateOfBirth.eq(filterRequest.getDateOfBirth()));
+            builder.and(student.dateOfBirth.stringValue().containsIgnoreCase(filterRequest.getDateOfBirth().toString()));
         }
         if (filterRequest.getPhoneNumber() != null) {
-            builder.and(student.phoneNumber.eq(filterRequest.getPhoneNumber()));
+            builder.and(student.phoneNumber.containsIgnoreCase(filterRequest.getPhoneNumber()));
         }
         if (filterRequest.getGender() != null) {
-            builder.and(student.gender.eq(filterRequest.getGender()));
+            builder.and(student.gender.stringValue().containsIgnoreCase(filterRequest.getGender().toString()));
         }
         if (filterRequest.getGpa() > 0) {
-            builder.and(student.gpa.eq(filterRequest.getGpa()));
+            builder.and(student.gpa.stringValue().containsIgnoreCase(String.valueOf(filterRequest.getGpa())));
         }
         if (filterRequest.getEnrollmentDate() != null) {
-            builder.and(student.enrollmentDate.eq(filterRequest.getEnrollmentDate()));
+            builder.and(student.enrollmentDate.stringValue().containsIgnoreCase(filterRequest.getEnrollmentDate().toString()));
         }
         if (filterRequest.getDepartmentId() != null) {
-            builder.and(student.departmentId.eq(Long.valueOf(filterRequest.getDepartmentId())));
+            builder.and(student.departmentId.stringValue().containsIgnoreCase(filterRequest.getDepartmentId()));
         }
         if (filterRequest.getGuardianName() != null) {
             builder.and(student.guardianName.containsIgnoreCase(filterRequest.getGuardianName()));
         }
         if (filterRequest.getGuardianPhoneNumber() != null) {
-            builder.and(student.guardianPhoneNumber.eq(filterRequest.getGuardianPhoneNumber()));
+            builder.and(student.guardianPhoneNumber.containsIgnoreCase(filterRequest.getGuardianPhoneNumber()));
         }
         if (filterRequest.getEmail() != null) {
             builder.and(student.email.containsIgnoreCase(filterRequest.getEmail()));
@@ -148,10 +148,10 @@ public class StudentProfileService implements IStudentProfileService {
             builder.and(student.degreeLevel.containsIgnoreCase(filterRequest.getDegreeLevel()));
         }
         if (filterRequest.getAcademicYearId() != null) {
-            builder.and(student.academicYearId.eq(filterRequest.getAcademicYearId()));
+            builder.and(student.academicYearId.stringValue().containsIgnoreCase(filterRequest.getAcademicYearId().toString()));
         }
         if (filterRequest.getPresent() != null) {
-            builder.and(student.present.eq(filterRequest.getPresent()));
+            builder.and(student.present.stringValue().containsIgnoreCase(filterRequest.getPresent().toString()));
         }
         if (filterRequest.getAvatarPath() != null) {
             builder.and(student.avatarPath.containsIgnoreCase(filterRequest.getAvatarPath()));
@@ -159,6 +159,7 @@ public class StudentProfileService implements IStudentProfileService {
 
         return builder;
     }
+
 
     private OrderSpecifier<?> getOrderSpecifier(StudentFilterRequest filterRequest, QStudentProfile student) {
         boolean isAscending =
