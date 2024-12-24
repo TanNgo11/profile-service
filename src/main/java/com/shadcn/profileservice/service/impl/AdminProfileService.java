@@ -93,22 +93,22 @@ public class AdminProfileService implements IAdminProfileService {
             builder.and(admin.email.containsIgnoreCase(filterRequest.getEmail()));
         }
         if (filterRequest.getPhoneNumber() != null) {
-            builder.and(admin.phoneNumber.eq(filterRequest.getPhoneNumber()));
+            builder.and(admin.phoneNumber.containsIgnoreCase(filterRequest.getPhoneNumber()));
         }
         if (filterRequest.getUsername() != null) {
             builder.and(admin.username.containsIgnoreCase(filterRequest.getUsername()));
         }
         if (filterRequest.getGender() != null) {
-            builder.and(admin.gender.eq(filterRequest.getGender()));
+            builder.and(admin.gender.stringValue().containsIgnoreCase(filterRequest.getGender().toString()));
         }
         if (filterRequest.getAddress() != null) {
             builder.and(admin.address.containsIgnoreCase(filterRequest.getAddress()));
         }
         if (filterRequest.getHireDate() != null) {
-            builder.and(admin.hireDate.eq(filterRequest.getHireDate()));
+            builder.and(admin.hireDate.stringValue().containsIgnoreCase(filterRequest.getHireDate().toString()));
         }
         if (filterRequest.getDepartmentId() != null) {
-            builder.and(admin.departmentId.eq(filterRequest.getDepartmentId()));
+            builder.and(admin.departmentId.containsIgnoreCase(filterRequest.getDepartmentId()));
         }
         if (filterRequest.getWorkSchedule() != null) {
             builder.and(admin.workSchedule.containsIgnoreCase(filterRequest.getWorkSchedule()));
@@ -117,7 +117,7 @@ public class AdminProfileService implements IAdminProfileService {
             builder.and(admin.emergencyContactName.containsIgnoreCase(filterRequest.getEmergencyContactName()));
         }
         if (filterRequest.getEmergencyContactPhoneNumber() != null) {
-            builder.and(admin.emergencyContactPhoneNumber.eq(filterRequest.getEmergencyContactPhoneNumber()));
+            builder.and(admin.emergencyContactPhoneNumber.containsIgnoreCase(filterRequest.getEmergencyContactPhoneNumber()));
         }
 
         return builder;
