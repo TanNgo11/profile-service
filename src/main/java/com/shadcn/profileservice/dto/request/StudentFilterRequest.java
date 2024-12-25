@@ -22,10 +22,7 @@ public class StudentFilterRequest {
 
     String username;
 
-    String firstName;
-
-    String lastName;
-
+    String fullName;
     String address;
 
     @JsonFormat(pattern = "dd-MM-yyyy")

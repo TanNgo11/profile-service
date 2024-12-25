@@ -102,11 +102,13 @@ public class StudentProfileService implements IStudentProfileService {
         if (filterRequest.getUsername() != null) {
             builder.and(student.username.containsIgnoreCase(filterRequest.getUsername()));
         }
-        if (filterRequest.getFirstName() != null) {
-            builder.and(student.firstName.containsIgnoreCase(filterRequest.getFirstName()));
-        }
-        if (filterRequest.getLastName() != null) {
-            builder.and(student.lastName.containsIgnoreCase(filterRequest.getLastName()));
+        if (filterRequest.getFullName() != null) {
+            builder.and(
+                    new BooleanBuilder()
+                            .or(student.firstName.containsIgnoreCase(filterRequest.getFullName()))
+                            .or(student.lastName.containsIgnoreCase(filterRequest.getFullName()))
+                            .or(student.middleName.containsIgnoreCase(filterRequest.getFullName()))
+            );
         }
         if (filterRequest.getAddress() != null) {
             builder.and(student.address.containsIgnoreCase(filterRequest.getAddress()));
