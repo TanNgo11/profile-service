@@ -43,8 +43,7 @@ public class AdminProfileController {
     @GetMapping("/users/admin")
     @PreAuthorize("hasRole('ADMIN')")
     ApiResponse<PageResponse<AdminProfileResponse>> getAllAdminProfiles(
-            @RequestParam(required = false) String firstName,
-            @RequestParam(required = false) String lastName,
+            @RequestParam(required = false) String fullName,
             @RequestParam(required = false) String email,
             @RequestParam(required = false) String phoneNumber,
             @RequestParam(required = false) String username,
@@ -60,8 +59,7 @@ public class AdminProfileController {
             @RequestParam(defaultValue = "1", required = false) Integer current,
             @RequestParam(defaultValue = "10", required = false) Integer pageSize) {
         AdminFilterRequest filterRequest = AdminFilterRequest.builder()
-                .firstName(firstName)
-                .lastName(lastName)
+                .fullName(fullName)
                 .email(email)
                 .phoneNumber(phoneNumber)
                 .username(username)

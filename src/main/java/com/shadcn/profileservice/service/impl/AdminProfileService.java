@@ -83,11 +83,13 @@ public class AdminProfileService implements IAdminProfileService {
     private BooleanBuilder buildFilterConditions(AdminFilterRequest filterRequest, QAdminProfile admin) {
         BooleanBuilder builder = new BooleanBuilder();
 
-        if (filterRequest.getFirstName() != null) {
-            builder.and(admin.firstName.containsIgnoreCase(filterRequest.getFirstName()));
-        }
-        if (filterRequest.getLastName() != null) {
-            builder.and(admin.lastName.containsIgnoreCase(filterRequest.getLastName()));
+        if (filterRequest.getFullName() != null) {
+            builder.and(
+                    new BooleanBuilder()
+                            .or(admin.firstName.containsIgnoreCase(filterRequest.getFullName()))
+                            .or(admin.lastName.containsIgnoreCase(filterRequest.getFullName()))
+                            .or(admin.middleName.containsIgnoreCase(filterRequest.getFullName()))
+            );
         }
         if (filterRequest.getEmail() != null) {
             builder.and(admin.email.containsIgnoreCase(filterRequest.getEmail()));

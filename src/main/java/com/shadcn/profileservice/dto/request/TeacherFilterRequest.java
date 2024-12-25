@@ -36,9 +36,7 @@ public class TeacherFilterRequest {
 
     String emergencyContactPhoneNumber;
 
-    String firstName;
-
-    String lastName;
+    String fullName;
 
     @JsonFormat(pattern = "dd-MM-yyyy")
     LocalDate dateOfBirth;

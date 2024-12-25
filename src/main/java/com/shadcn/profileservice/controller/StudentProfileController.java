@@ -56,8 +56,7 @@ public class StudentProfileController {
     ApiResponse<PageResponse<StudentProfileResponse>> getAllStudentProfiles(
             @RequestParam(required = false) String studentId,
             @RequestParam(required = false) String username,
-            @RequestParam(required = false) String firstName,
-            @RequestParam(required = false) String lastName,
+            @RequestParam(required = false) String fullName,
             @RequestParam(required = false) String address,
             @RequestParam(required = false) String dateOfBirth, // Format: dd-MM-yyyy
             @RequestParam(required = false) String phoneNumber,
@@ -82,8 +81,7 @@ public class StudentProfileController {
         StudentFilterRequest filterRequest = StudentFilterRequest.builder()
                 .studentId(studentId)
                 .username(username)
-                .firstName(firstName)
-                .lastName(lastName)
+                .fullName(fullName)
                 .address(address)
                 .dateOfBirth(
                         dateOfBirth != null

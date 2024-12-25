@@ -173,11 +173,13 @@ public class TeacherProfileService implements ITeacherProfileService {
         if (filterRequest.getEmergencyContactPhoneNumber() != null) {
             builder.and(teacher.emergencyContactPhoneNumber.containsIgnoreCase(filterRequest.getEmergencyContactPhoneNumber()));
         }
-        if (filterRequest.getFirstName() != null) {
-            builder.and(teacher.firstName.containsIgnoreCase(filterRequest.getFirstName()));
-        }
-        if (filterRequest.getLastName() != null) {
-            builder.and(teacher.lastName.containsIgnoreCase(filterRequest.getLastName()));
+        if (filterRequest.getFullName() != null) {
+            builder.and(
+                    new BooleanBuilder()
+                            .or(teacher.firstName.containsIgnoreCase(filterRequest.getFullName()))
+                            .or(teacher.lastName.containsIgnoreCase(filterRequest.getFullName()))
+                            .or(teacher.middleName.containsIgnoreCase(filterRequest.getFullName()))
+            );
         }
         if (filterRequest.getDateOfBirth() != null) {
             builder.and(teacher.dateOfBirth.stringValue().containsIgnoreCase(filterRequest.getDateOfBirth().toString()));

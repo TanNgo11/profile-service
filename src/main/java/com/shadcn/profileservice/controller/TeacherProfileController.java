@@ -61,8 +61,7 @@ public class TeacherProfileController {
             @RequestParam(required = false) String address,
             @RequestParam(required = false) String emergencyContactName,
             @RequestParam(required = false) String emergencyContactPhoneNumber,
-            @RequestParam(required = false) String firstName,
-            @RequestParam(required = false) String lastName,
+            @RequestParam(required = false) String fullName,
             @RequestParam(required = false) String dateOfBirth, // Format: dd-MM-yyyy
             @RequestParam(required = false) String phoneNumber,
             @RequestParam(required = false) Gender gender,
@@ -84,8 +83,7 @@ public class TeacherProfileController {
                 .address(address)
                 .emergencyContactName(emergencyContactName)
                 .emergencyContactPhoneNumber(emergencyContactPhoneNumber)
-                .firstName(firstName)
-                .lastName(lastName)
+                .fullName(fullName)
                 .dateOfBirth(
                         dateOfBirth != null
                                 ? LocalDate.parse(dateOfBirth, DateTimeFormatter.ofPattern("dd-MM-yyyy"))
