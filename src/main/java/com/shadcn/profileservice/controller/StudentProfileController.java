@@ -118,7 +118,7 @@ public class StudentProfileController {
     }
 
     @GetMapping("/users/students/{studentId}")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER') or hasRole('STUDENT')")
     public ApiResponse<StudentProfileResponse> getStudentProfileById(@PathVariable Long studentId) {
         return ApiResponse.success(studentProfileService.getStudentProfileById(studentId));
     }

@@ -84,12 +84,10 @@ public class AdminProfileService implements IAdminProfileService {
         BooleanBuilder builder = new BooleanBuilder();
 
         if (filterRequest.getFullName() != null) {
-            builder.and(
-                    new BooleanBuilder()
-                            .or(admin.firstName.containsIgnoreCase(filterRequest.getFullName()))
-                            .or(admin.lastName.containsIgnoreCase(filterRequest.getFullName()))
-                            .or(admin.middleName.containsIgnoreCase(filterRequest.getFullName()))
-            );
+            builder.and(new BooleanBuilder()
+                    .or(admin.firstName.containsIgnoreCase(filterRequest.getFullName()))
+                    .or(admin.lastName.containsIgnoreCase(filterRequest.getFullName()))
+                    .or(admin.middleName.containsIgnoreCase(filterRequest.getFullName())));
         }
         if (filterRequest.getEmail() != null) {
             builder.and(admin.email.containsIgnoreCase(filterRequest.getEmail()));
@@ -101,13 +99,17 @@ public class AdminProfileService implements IAdminProfileService {
             builder.and(admin.username.containsIgnoreCase(filterRequest.getUsername()));
         }
         if (filterRequest.getGender() != null) {
-            builder.and(admin.gender.stringValue().containsIgnoreCase(filterRequest.getGender().toString()));
+            builder.and(admin.gender
+                    .stringValue()
+                    .containsIgnoreCase(filterRequest.getGender().toString()));
         }
         if (filterRequest.getAddress() != null) {
             builder.and(admin.address.containsIgnoreCase(filterRequest.getAddress()));
         }
         if (filterRequest.getHireDate() != null) {
-            builder.and(admin.hireDate.stringValue().containsIgnoreCase(filterRequest.getHireDate().toString()));
+            builder.and(admin.hireDate
+                    .stringValue()
+                    .containsIgnoreCase(filterRequest.getHireDate().toString()));
         }
         if (filterRequest.getDepartmentId() != null) {
             builder.and(admin.departmentId.containsIgnoreCase(filterRequest.getDepartmentId()));
@@ -119,7 +121,8 @@ public class AdminProfileService implements IAdminProfileService {
             builder.and(admin.emergencyContactName.containsIgnoreCase(filterRequest.getEmergencyContactName()));
         }
         if (filterRequest.getEmergencyContactPhoneNumber() != null) {
-            builder.and(admin.emergencyContactPhoneNumber.containsIgnoreCase(filterRequest.getEmergencyContactPhoneNumber()));
+            builder.and(admin.emergencyContactPhoneNumber.containsIgnoreCase(
+                    filterRequest.getEmergencyContactPhoneNumber()));
         }
 
         return builder;

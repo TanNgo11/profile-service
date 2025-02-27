@@ -153,7 +153,9 @@ public class TeacherProfileService implements ITeacherProfileService {
             builder.and(teacher.username.containsIgnoreCase(filterRequest.getUsername()));
         }
         if (filterRequest.getHireDate() != null) {
-            builder.and(teacher.hireDate.stringValue().containsIgnoreCase(filterRequest.getHireDate().toString()));
+            builder.and(teacher.hireDate
+                    .stringValue()
+                    .containsIgnoreCase(filterRequest.getHireDate().toString()));
         }
         if (filterRequest.getDepartmentId() != null) {
             builder.and(teacher.departmentId.containsIgnoreCase(filterRequest.getDepartmentId()));
@@ -171,24 +173,27 @@ public class TeacherProfileService implements ITeacherProfileService {
             builder.and(teacher.emergencyContactName.containsIgnoreCase(filterRequest.getEmergencyContactName()));
         }
         if (filterRequest.getEmergencyContactPhoneNumber() != null) {
-            builder.and(teacher.emergencyContactPhoneNumber.containsIgnoreCase(filterRequest.getEmergencyContactPhoneNumber()));
+            builder.and(teacher.emergencyContactPhoneNumber.containsIgnoreCase(
+                    filterRequest.getEmergencyContactPhoneNumber()));
         }
         if (filterRequest.getFullName() != null) {
-            builder.and(
-                    new BooleanBuilder()
-                            .or(teacher.firstName.containsIgnoreCase(filterRequest.getFullName()))
-                            .or(teacher.lastName.containsIgnoreCase(filterRequest.getFullName()))
-                            .or(teacher.middleName.containsIgnoreCase(filterRequest.getFullName()))
-            );
+            builder.and(new BooleanBuilder()
+                    .or(teacher.firstName.containsIgnoreCase(filterRequest.getFullName()))
+                    .or(teacher.lastName.containsIgnoreCase(filterRequest.getFullName()))
+                    .or(teacher.middleName.containsIgnoreCase(filterRequest.getFullName())));
         }
         if (filterRequest.getDateOfBirth() != null) {
-            builder.and(teacher.dateOfBirth.stringValue().containsIgnoreCase(filterRequest.getDateOfBirth().toString()));
+            builder.and(teacher.dateOfBirth
+                    .stringValue()
+                    .containsIgnoreCase(filterRequest.getDateOfBirth().toString()));
         }
         if (filterRequest.getPhoneNumber() != null) {
             builder.and(teacher.phoneNumber.containsIgnoreCase(filterRequest.getPhoneNumber()));
         }
         if (filterRequest.getGender() != null) {
-            builder.and(teacher.gender.stringValue().containsIgnoreCase(filterRequest.getGender().toString()));
+            builder.and(teacher.gender
+                    .stringValue()
+                    .containsIgnoreCase(filterRequest.getGender().toString()));
         }
         if (filterRequest.getEmail() != null) {
             builder.and(teacher.email.containsIgnoreCase(filterRequest.getEmail()));
@@ -199,7 +204,6 @@ public class TeacherProfileService implements ITeacherProfileService {
 
         return builder;
     }
-
 
     private OrderSpecifier<?> getOrderSpecifier(TeacherFilterRequest filterRequest, QTeacherProfile teacher) {
         boolean isAscending = "asc".equalsIgnoreCase(filterRequest.getSortDirection());
