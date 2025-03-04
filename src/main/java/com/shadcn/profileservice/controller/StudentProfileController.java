@@ -123,6 +123,12 @@ public class StudentProfileController {
         return ApiResponse.success(studentProfileService.getStudentProfileById(studentId));
     }
 
+    @GetMapping("/users/students/student-entity-id/{studentId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('STUDENT')")
+    public ApiResponse<StudentProfileResponse> getStudentProfileByStudentEntityId(@PathVariable Long studentId) {
+        return ApiResponse.success(studentProfileService.getStudentProfileByStudentEntityId(studentId));
+    }
+
     @PostMapping("/users/students/usernames")
     @PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
     public ApiResponse<List<StudentProfileResponse>> getAllStudentProfilesByUsernames(
