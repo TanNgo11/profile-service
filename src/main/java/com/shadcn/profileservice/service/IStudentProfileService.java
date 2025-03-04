@@ -24,4 +24,6 @@ public interface IStudentProfileService {
     List<StudentProfileResponse> getAllStudentByAcademicYearId(Long academicYearId);
 
     void deleteStudents(List<String> studentUsernames);
+
+    StudentProfileResponse getStudentProfileByStudentEntityId(Long studentId);
 }

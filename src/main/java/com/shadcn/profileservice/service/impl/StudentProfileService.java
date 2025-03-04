@@ -276,6 +276,11 @@ public class StudentProfileService implements IStudentProfileService {
     }
 
     @Override
+    public StudentProfileResponse getStudentProfileByStudentEntityId(Long studentId) {
+        return userProfileMapper.toStudentProfileReponse(studentProfileRepository.getStudentProfileByStudentId(studentId));
+    }
+
+    @Override
     public List<StudentProfileResponse> getAllStudentProfilesByIds(long[] ids) {
         log.info("Fetching student profiles by IDs: {}", Arrays.toString(ids));
         Set<StudentProfile> studentProfiles = new HashSet<>();
