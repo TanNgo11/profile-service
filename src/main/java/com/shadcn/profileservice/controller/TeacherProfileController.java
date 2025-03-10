@@ -105,6 +105,12 @@ public class TeacherProfileController {
         return ApiResponse.success(teacherProfileService.getAllTeacherProfilesByIds(teacherIds));
     }
 
+    @GetMapping("/users/teachers/entity-ids")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER') or hasRole('STUDENT')")
+    public ApiResponse<List<TeacherProfileResponse>> getAllTeacherProfilesByEntityIds(@RequestBody long[] teacherIds) {
+        return ApiResponse.success(teacherProfileService.getAllTeacherProfilesByEntityIds(teacherIds));
+    }
+
     //    @GetMapping("/users/teachers/usernames")
     //    @PreAuthorize("hasRole('ADMIN')")
     //    public ApiResponse<List<TeacherProfileResponse>> getAllTeacherProfilesByUsernames(@RequestParam String[]
@@ -131,5 +137,11 @@ public class TeacherProfileController {
     public ApiResponse<Void> deleteTeacherProfiles(@RequestBody String[] teacherUsernames) {
         teacherProfileService.deleteTeacherProfiles(teacherUsernames);
         return ApiResponse.empty();
+    }
+
+    @GetMapping("/users/teachers/teacher-entity-id/{teacherId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
+    public ApiResponse<TeacherProfileResponse> getTeacherProfileByTeacherEntityId(@PathVariable Long teacherId) {
+        return ApiResponse.success(teacherProfileService.getTeacherProfileByTeacherEntityId(teacherId));
     }
 }

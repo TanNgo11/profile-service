@@ -3,6 +3,7 @@ package com.shadcn.profileservice.repository;
 import java.util.*;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.shadcn.profileservice.entity.TeacherProfile;
@@ -11,9 +12,13 @@ import com.shadcn.profileservice.entity.TeacherProfile;
 public interface TeacherProfileRepository extends JpaRepository<TeacherProfile, Long> {
     TeacherProfile findTopByOrderByIdDesc();
 
-    Optional<TeacherProfile> findByTeacherId(String teacherId);
+    @Query("SELECT s FROM TeacherProfile s WHERE s.teacherId = :teacherId")
+    TeacherProfile findByTeacherId(String teacherId);
 
     Optional<TeacherProfile> findByUsername(String username);
 
     boolean existsByPhoneNumber(String phone);
+
+    @Query("SELECT s FROM TeacherProfile s WHERE s.teacherId IN :teacherEntityIds")
+    List<TeacherProfile> findAllByTeacherEntityIds(long[] teacherEntityIds);
 }

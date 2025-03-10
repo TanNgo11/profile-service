@@ -277,7 +277,8 @@ public class StudentProfileService implements IStudentProfileService {
 
     @Override
     public StudentProfileResponse getStudentProfileByStudentEntityId(Long studentId) {
-        return userProfileMapper.toStudentProfileReponse(studentProfileRepository.getStudentProfileByStudentId(studentId));
+        return userProfileMapper.toStudentProfileReponse(
+                studentProfileRepository.getStudentProfileByStudentId(studentId));
     }
 
     @Override
@@ -293,6 +294,15 @@ public class StudentProfileService implements IStudentProfileService {
         if (!missingIds.isEmpty()) {
             log.warn("Student profiles not found for IDs: {}", missingIds);
         }
+
+        return studentProfiles.stream()
+                .map(userProfileMapper::toStudentProfileReponse)
+                .toList();
+    }
+
+    @Override
+    public List<StudentProfileResponse> getAllStudentProfilesByEntityIds(long[] studentIds) {
+        List<StudentProfile> studentProfiles = studentProfileRepository.findAllByStudentEntityIds(studentIds);
 
         return studentProfiles.stream()
                 .map(userProfileMapper::toStudentProfileReponse)

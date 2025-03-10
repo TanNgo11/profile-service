@@ -143,6 +143,12 @@ public class TeacherProfileService implements ITeacherProfileService {
         teacherProfileRepository.deleteById(Long.parseLong(id));
     }
 
+    @Override
+    public TeacherProfileResponse getTeacherProfileByTeacherEntityId(long teacherId) {
+        return userProfileMapper.toTeacherProfileReponse(
+                teacherProfileRepository.findByTeacherId(String.valueOf(teacherId)));
+    }
+
     private BooleanBuilder buildFilterConditions(TeacherFilterRequest filterRequest, QTeacherProfile teacher) {
         BooleanBuilder builder = new BooleanBuilder();
 
@@ -288,6 +294,13 @@ public class TeacherProfileService implements ITeacherProfileService {
         return teacherProfiles.stream()
                 .map(userProfileMapper::toTeacherProfileReponse)
                 .toList();
+    }
+
+    @Override
+    public List<TeacherProfileResponse> getAllTeacherProfilesByEntityIds(long[] teacherIds) {
+        List<TeacherProfile> teachers = teacherProfileRepository.findAllByTeacherEntityIds(teacherIds);
+
+        return teachers.stream().map(userProfileMapper::toTeacherProfileReponse).toList();
     }
 
     @Override
