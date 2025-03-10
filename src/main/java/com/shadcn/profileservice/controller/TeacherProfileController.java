@@ -107,7 +107,7 @@ public class TeacherProfileController {
 
     @GetMapping("/users/teachers/entity-ids")
     @PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER') or hasRole('STUDENT')")
-    public ApiResponse<List<TeacherProfileResponse>> getAllTeacherProfilesByEntityIds(@RequestBody long[] teacherIds) {
+    public ApiResponse<List<TeacherProfileResponse>> getAllTeacherProfilesByEntityIds(@RequestParam long[] teacherIds) {
         return ApiResponse.success(teacherProfileService.getAllTeacherProfilesByEntityIds(teacherIds));
     }
 
