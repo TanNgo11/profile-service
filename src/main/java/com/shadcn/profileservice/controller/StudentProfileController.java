@@ -119,7 +119,7 @@ public class StudentProfileController {
 
     @GetMapping("/users/students/entity-ids")
     @PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER') or hasRole('STUDENT')")
-    public ApiResponse<List<StudentProfileResponse>> getAllStudentProfilesByEntityIds(@RequestBody long[] studentIds) {
+    public ApiResponse<List<StudentProfileResponse>> getAllStudentProfilesByEntityIds(@RequestParam long[] studentIds) {
         return ApiResponse.success(studentProfileService.getAllStudentProfilesByEntityIds(studentIds));
     }
 
