@@ -14,6 +14,8 @@ public interface IStudentProfileService {
 
     List<StudentProfileResponse> getAllStudentProfilesByIds(long[] ids);
 
+    List<StudentProfileResponse> getAllStudentProfilesByEntityIds(long[] studentIds);
+
     StudentProfileResponse getStudentProfileById(Long id);
 
     List<StudentProfileResponse> getAllStudentProfilesByUsernames(List<String> usernames);

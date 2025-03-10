@@ -117,6 +117,12 @@ public class StudentProfileController {
         return ApiResponse.success(studentProfileService.getAllStudentProfilesByIds(studentIds));
     }
 
+    @GetMapping("/users/students/entity-ids")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER') or hasRole('STUDENT')")
+    public ApiResponse<List<StudentProfileResponse>> getAllStudentProfilesByEntityIds(@RequestBody long[] studentIds) {
+        return ApiResponse.success(studentProfileService.getAllStudentProfilesByEntityIds(studentIds));
+    }
+
     @GetMapping("/users/students/{studentId}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER') or hasRole('STUDENT')")
     public ApiResponse<StudentProfileResponse> getStudentProfileById(@PathVariable Long studentId) {

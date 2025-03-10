@@ -17,6 +17,8 @@ public interface ITeacherProfileService {
 
     List<TeacherProfileResponse> getAllTeacherProfilesByIds(long[] ids);
 
+    List<TeacherProfileResponse> getAllTeacherProfilesByEntityIds(long[] teacherIds);
+
     List<TeacherProfileResponse> getAllTeacherProfilesByUsernames(String[] usernames);
 
     PageResponse<TeacherProfileResponse> getAllTeacherProfiles(
@@ -25,4 +27,6 @@ public interface ITeacherProfileService {
     void deleteTeacherProfiles(String[] ids);
 
     void deleteTeacherProfileById(String id);
+
+    TeacherProfileResponse getTeacherProfileByTeacherEntityId(long teacherId);
 }
